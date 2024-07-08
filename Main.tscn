@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=3 uid="uid://c7yhr1xpa33hc"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_eliy0"]
+[ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="1_vecal"]
+[ext_resource type="PackedScene" uid="uid://b5a1x7htlysw6" path="res://Mob.tscn" id="2_chnab"]
+[ext_resource type="Texture2D" uid="uid://c3rbq7njvoaf0" path="res://art/ice_floor3.png" id="3_vmcc4"]
+[ext_resource type="PackedScene" uid="uid://d2e7okgajipy4" path="res://Hud.tscn" id="4_pb3xs"]
+[ext_resource type="AudioStream" uid="uid://532t1b3ql5ff" path="res://sound/bgm.mp3" id="5_c03qo"]
+[ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="5_fqumu"]
+[ext_resource type="Script" path="res://Music.gd" id="6_w83ls"]
+[ext_resource type="Script" path="res://DeathBox.gd" id="8_x28hn"]
+[ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="10_tx0cq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4tne5"]
+size = Vector2(480, 80)
+
+[node name="Main" type="Node"]
+script = ExtResource("1_eliy0")
+mob_scene = ExtResource("2_chnab")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -152.0
+offset_right = 272.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IceTextureFloor" type="TextureRect" parent="."]
+self_modulate = Color(0.972549, 1, 1, 0.784314)
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -1.0
+offset_right = 120.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_vmcc4")
+expand_mode = 2
+stretch_mode = 1
+flip_h = true
+flip_v = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 450)
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="HUD" parent="." instance=ExtResource("4_pb3xs")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_c03qo")
+script = ExtResource("6_w83ls")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_fqumu")
+
+[node name="DeathBox" type="Area2D" parent="."]
+position = Vector2(0, 720)
+script = ExtResource("8_x28hn")
+
+[node name="WaterTexture" type="TextureRect" parent="DeathBox"]
+modulate = Color(1, 1, 1, 0.686275)
+texture_filter = 1
+offset_top = -128.0
+offset_right = 480.0
+texture = ExtResource("10_tx0cq")
+expand_mode = 4
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathBox"]
+position = Vector2(240, -40)
+shape = SubResource("RectangleShape2D_4tne5")
+debug_color = Color(0.980369, 0, 0.380257, 0.42)
+
+[node name="Player" parent="." instance=ExtResource("1_vecal")]
+
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="finished" from="Music" to="Music" method="_on_finished"]
+[connection signal="body_entered" from="DeathBox" to="Player" method="_on_death_box_body_entered"]
+[connection signal="fell" from="Player" to="." method="game_over"]
+[connection signal="touch" from="Player" to="." method="_on_player_touch"]
