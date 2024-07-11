@@ -28,6 +28,7 @@ func game_over():
 
 	if highScoreUpdated:
 		$HUD.update_high_score(highScore)
+		$HUD/NewHighScore.show()
 		save()
 
 func new_game():
@@ -39,7 +40,6 @@ func new_game():
 	$StartTimer.start()
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready")
-	$HUD/HighScoreMsg.hide()
 	get_tree().call_group("mobs", "queue_free")
 	$Music.play()
 
