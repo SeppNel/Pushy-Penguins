@@ -5,11 +5,12 @@ var score
 var highScore = 0
 var bigPenguinChance = 10
 var difficultyFactor = 0
-var highScoreUpdated : Bool = false
+var highScoreUpdated : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	load()
+	save_load()
+	$HUD.update_high_score(highScore)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -21,10 +22,12 @@ func game_over():
 	$MobTimer.stop()
 	$HUD.show_game_over()
 	$HUD.hide_origin_marker()
+	$HUD/HighScoreMsg.show()
 	$Music.stop()
 	$DeathSound.play()
 
 	if highScoreUpdated:
+		$HUD.update_high_score(highScore)
 		save()
 
 func new_game():
@@ -36,6 +39,7 @@ func new_game():
 	$StartTimer.start()
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready")
+	$HUD/HighScoreMsg.hide()
 	get_tree().call_group("mobs", "queue_free")
 	$Music.play()
 
@@ -95,7 +99,7 @@ func save():
 	save_file.store_line(json_string)
 
 
-func load():
+func save_load():
 	if not FileAccess.file_exists("user://savegame.save"):
 		return # Error! We don't have a save to load.
 

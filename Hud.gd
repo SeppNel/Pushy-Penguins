@@ -18,6 +18,8 @@ func show_message(text):
 	$Message.show()
 	$MessageTimer.start()
 	
+func update_high_score(score : int):
+	$HighScoreMsg.text = "HighScore: " + str(score)
 	
 func show_game_over():
 	show_message("Game Over")
