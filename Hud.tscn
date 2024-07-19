@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2e7okgajipy4"]
+[gd_scene load_steps=7 format=3 uid="uid://d2e7okgajipy4"]
 
 [ext_resource type="Script" path="res://Hud.gd" id="1_ch4na"]
+[ext_resource type="Script" path="res://FPS Counter.gd" id="2_bv3ww"]
 [ext_resource type="FontFile" uid="uid://bk6w82hh0dgnv" path="res://fonts/Xolonium-Regular.ttf" id="2_iuara"]
 [ext_resource type="Texture2D" uid="uid://ff66shhhik16" path="res://art/origin_marker.png" id="3_74bq3"]
 
@@ -12,6 +13,19 @@ events = [SubResource("InputEventAction_qand2")]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ch4na")
+
+[node name="FPS Counter" type="Label" parent="."]
+visible = false
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 41.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 25
+text = "FPS"
+script = ExtResource("2_bv3ww")
 
 [node name="ScoreLabel" type="Label" parent="."]
 anchors_preset = 5
