@@ -62,6 +62,7 @@ func _on_mob_timer_timeout():
 
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
+	move_child(mob, -2)
 
 
 func _on_score_timer_timeout():
