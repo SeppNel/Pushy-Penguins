@@ -3,8 +3,9 @@ extends RigidBody2D
 signal fell
 signal touch(pos)
 
-const kb_speed = 20
 const speed_limit = 1000
+const min_screen_clamp_offset = Vector2(20, 30) # Left, Top
+const max_screen_clamp_offset = Vector2(20, 0) # Right, Bottom
 
 var screen_size # Size of the game window.
 var initial_touch_position := Vector2.ZERO
@@ -19,26 +20,19 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_DISABLED
 	hide()
 
-# Called every frame. Controls for keyboard and reset logic
+# Called every frame.
 func _integrate_forces(s):
 	if is_dead:
 		linear_velocity = Vector2.ZERO
 		angular_velocity = 0
 		position = start_position
 		rotation = 0
-	else:
-		var lv = s.get_linear_velocity()
-		if Input.is_action_pressed("move_right"):
-			lv.x += kb_speed
-		if Input.is_action_pressed("move_left"):
-			lv.x -= kb_speed
-		if Input.is_action_pressed("move_down"):
-			lv.y += kb_speed
-		if Input.is_action_pressed("move_up"):
-			lv.y -= kb_speed
-		s.set_linear_velocity(lv)
+	
+	#Stop sideways velocity at borders
+	if position.x < min_screen_clamp_offset.x || position.x > screen_size.x - max_screen_clamp_offset.x:
+		linear_velocity.x = 0
 		
-	position = position.clamp(Vector2(20,30), screen_size - Vector2(20, 0))
+	position = position.clamp(min_screen_clamp_offset, screen_size - max_screen_clamp_offset)
 	linear_velocity = linear_velocity.clamp(Vector2(-speed_limit, -speed_limit), Vector2(speed_limit, speed_limit))
 
 #TouchScreen Input
