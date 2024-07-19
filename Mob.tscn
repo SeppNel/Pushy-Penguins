@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b5a1x7htlysw6"]
+[gd_scene load_steps=10 format=3 uid="uid://b5a1x7htlysw6"]
 
 [ext_resource type="Script" path="res://Mob.gd" id="1_ndbm5"]
 [ext_resource type="Texture2D" uid="uid://biiqcboss1mht" path="res://art/penguin_walk_right.png" id="6_selfp"]
@@ -8,18 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://ber26ae446po1" path="res://art/penguin_walk_left.png" id="10_ir1gm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h6exh"]
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qajh8"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 35.0
-gravity = Vector3(0, -400, 0)
-scale_min = 3.0
-scale_max = 7.0
-color = Color(0.94902, 0.94902, 0.94902, 0.768627)
-turbulence_enabled = true
-turbulence_noise_strength = 18.26
-turbulence_noise_scale = 7.112
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_06mvc"]
 animations = [{
@@ -67,10 +55,17 @@ gravity_scale = 0.0
 script = ExtResource("1_ndbm5")
 metadata/_edit_group_ = true
 
-[node name="SnowParticles" type="GPUParticles2D" parent="."]
+[node name="SnowParticles" type="CPUParticles2D" parent="."]
 amount = 5
-process_material = SubResource("ParticleProcessMaterial_qajh8")
 randomness = 0.61
+fixed_fps = 30
+draw_order = 1
+emission_shape = 1
+emission_sphere_radius = 35.0
+gravity = Vector2(0, -400)
+scale_amount_min = 3.0
+scale_amount_max = 7.0
+color = Color(0.94902, 0.94902, 0.94902, 0.768627)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1.3, 1)
