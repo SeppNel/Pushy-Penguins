@@ -52,7 +52,7 @@ flip_v = true
 position = Vector2(240, 450)
 
 [node name="MobTimer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.25
 
 [node name="ScoreTimer" type="Timer" parent="."]
 

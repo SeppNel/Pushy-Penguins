@@ -70,7 +70,7 @@ func _on_score_timer_timeout():
 
 	if score % 50 == 0:
 		difficultyFactor += 1
-		$MobTimer.wait_time -= 0.01
+		$MobTimer.wait_time -= 0.02
 	
 	if score > highScore:
 		highScore = score
