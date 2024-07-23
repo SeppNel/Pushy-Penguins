@@ -62,7 +62,7 @@ func apply_joystick_force(direction):
 	var normalized_direction = direction.normalized()
 	var force_magnitude = direction.length()
 	
-	var force = normalized_direction * force_magnitude * 1 # Adjust the multiplier as needed
+	var force = normalized_direction * force_magnitude * 0.8 # Adjust the multiplier as needed
 	# Apply force to the character
 	apply_force(force)
 
