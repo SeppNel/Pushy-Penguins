@@ -15,7 +15,6 @@ events = [SubResource("InputEventAction_qand2")]
 script = ExtResource("1_ch4na")
 
 [node name="FPS Counter" type="Label" parent="."]
-visible = false
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 41.0
