@@ -5,11 +5,13 @@ var score
 var highScore = 0
 var bigPenguinChance = 10
 var difficultyFactor = 0
+var defaultMobTimerWaitTime
 var highScoreUpdated : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	save_load()
+	defaultMobTimerWaitTime = $MobTimer.wait_time
 	$HUD.update_high_score(highScore)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,6 +37,7 @@ func new_game():
 	score = 0
 	highScoreUpdated = false
 	difficultyFactor = 0
+	$MobTimer.wait_time = defaultMobTimerWaitTime
 	$Player.start($StartPosition.position)
 	
 	$StartTimer.start()
