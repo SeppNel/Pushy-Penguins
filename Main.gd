@@ -1,9 +1,11 @@
 extends Node
 
 @export var mob_scene: PackedScene
+
+const BIG_PENGUIN_CHANCE = 10
+
 var score
 var highScore = 0
-var bigPenguinChance = 10
 var difficultyFactor = 0
 var defaultMobTimerWaitTime
 var highScoreUpdated : bool = false
@@ -13,6 +15,7 @@ func _ready():
 	save_load()
 	defaultMobTimerWaitTime = $MobTimer.wait_time
 	$HUD.update_high_score(highScore)
+	$Player.splash.connect(splash)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -38,6 +41,7 @@ func new_game():
 	highScoreUpdated = false
 	difficultyFactor = 0
 	$MobTimer.wait_time = defaultMobTimerWaitTime
+	#$MobTimer.paused = true
 	$Player.start($StartPosition.position)
 	
 	$StartTimer.start()
@@ -50,10 +54,15 @@ func new_game():
 func _on_mob_timer_timeout():
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
+	
+	mob.splash.connect(splash)
+	
 	# Small penguin if true, big if false
-	if randi_range(1, 100) < 100 - (bigPenguinChance + 5 * difficultyFactor):
+	if randi_range(1, 100) < 100 - (BIG_PENGUIN_CHANCE + 5 * difficultyFactor):
 		mob.get_node("AnimatedSprite2D").scale = Vector2(0.05, 0.05)
 		mob.get_node("CollisionShape2D").scale = Vector2(0.5, 0.5)
+	else:
+		mob.isBigPenguin = true
 
 	# Set the mob's spawn position to a random location.
 	mob.position = Vector2(randf_range(0,480), -20)
@@ -120,3 +129,13 @@ func save_load():
 	# Get the data from the JSON object
 	var data = json.get_data()
 	highScore = data["high_score"]
+
+func splash(pos, size):
+	var water = preload("res://Water_Splash.tscn")
+	var instance = water.instantiate()
+	instance.position = pos
+	instance.position.y += 10
+	instance.scale = Vector2(size,size)
+	instance.scale_amount_min = size
+	instance.emitting = true
+	add_child(instance)

@@ -2,14 +2,16 @@ extends RigidBody2D
 
 signal fell
 signal touch(pos)
+signal splash(pos, size)
 
-const speed_limit = 1000
-const min_screen_clamp_offset = Vector2(20, 30) # Left, Top
-const max_screen_clamp_offset = Vector2(20, 0) # Right, Bottom
-
-const rotation_cap = 0.5
-const rotation_speed = 100.0  # Adjust for smoother or faster rotation
-const rotation_av_cap = 4.0
+const SPEED_LIMIT = 1000
+const MIN_SCREEN_CLAMP_OFFSET = Vector2(20, 30) # Left, Top
+const MAX_SCREEN_CLAMP_OFFSET = Vector2(20, 0) # Right, Bottom
+const ROTATION_CAP = 0.5
+const ROTATION_SPEED = 100.0  # Adjust for smoother or faster rotation
+const ROTATION_AV_CAP = 4.0
+#const ROTATION_SPRITES = ["up", "upright", "right", "downright", "down", "downleft", "left", "upleft", "up"]
+const ROTATION_SPRITES = ["up", "up", "up", "down", "down", "down", "down", "up", "up"]
 
 var screen_size # Size of the game window.
 var initial_touch_position := Vector2.ZERO
@@ -27,16 +29,16 @@ func _ready():
 
 func handleRotation():
 	# Smooth rotation to 0 (Look forward)
-	rotation = clamp(rotation, -rotation_cap, rotation_cap)
+	rotation = clamp(rotation, -ROTATION_CAP, ROTATION_CAP)
 	var angle_diff = angle_difference(rotation, 0)
-	var torque = angle_diff * rotation_speed
+	var torque = angle_diff * ROTATION_SPEED
 	apply_torque_impulse(torque)
 
 	# Clamping like before causes weird behaivour, so manual it is
-	if angular_velocity > rotation_av_cap:
-		angular_velocity = rotation_av_cap
-	elif angular_velocity < -rotation_av_cap:
-		angular_velocity = -rotation_av_cap
+	if angular_velocity > ROTATION_AV_CAP:
+		angular_velocity = ROTATION_AV_CAP
+	elif angular_velocity < -ROTATION_AV_CAP:
+		angular_velocity = -ROTATION_AV_CAP
 
 # Called every frame.
 func _integrate_forces(s):
@@ -47,12 +49,12 @@ func _integrate_forces(s):
 		rotation = 0
 	
 	# Stop sideways velocity at borders
-	if position.x < min_screen_clamp_offset.x || position.x > screen_size.x - max_screen_clamp_offset.x:
+	if position.x < MIN_SCREEN_CLAMP_OFFSET.x || position.x > screen_size.x - MAX_SCREEN_CLAMP_OFFSET.x:
 		linear_velocity.x = 0
 	
 	# Limit position to screen borders and velocity to custom limit
-	position = position.clamp(min_screen_clamp_offset, screen_size - max_screen_clamp_offset)
-	linear_velocity = linear_velocity.clamp(Vector2(-speed_limit, -speed_limit), Vector2(speed_limit, speed_limit))
+	position = position.clamp(MIN_SCREEN_CLAMP_OFFSET, screen_size - MAX_SCREEN_CLAMP_OFFSET)
+	linear_velocity = linear_velocity.clamp(Vector2(-SPEED_LIMIT, -SPEED_LIMIT), Vector2(SPEED_LIMIT, SPEED_LIMIT))
 
 	# Handle player rotation, we want to woddle a bit but still look forward
 	handleRotation()
@@ -74,15 +76,19 @@ func _input(event):
 		# Update touch position
 		current_touch_position = event.position
 
+func sprite_rotation():
+	var angle = rad_to_deg(linear_velocity.angle()) + 90 # +90 bcs 0 is right and I want it up
+	if angle < 0:
+		angle += 360
+	var angle_index = round(angle / 45)
+	$AnimatedSprite2D.play(ROTATION_SPRITES[angle_index])
+
 func _process(delta):
 	if is_touching and current_touch_position != null and !is_dead :
 		var direction = current_touch_position - initial_touch_position
 		apply_joystick_force(direction)
 		
-	if linear_velocity.y > 0:
-		$AnimatedSprite2D.play("down")
-	else:
-		$AnimatedSprite2D.play("up")
+	sprite_rotation()
 
 func apply_joystick_force(direction):
 	# Normalize direction to get the direction vector
@@ -102,6 +108,10 @@ func start(pos):
 	is_dead = false
 
 func _on_death_box_body_entered(body):
+	if body != self:
+		return
+		
+	splash.emit(position, 1)
 	is_dead = true
 	hide() # Player disappears after being hit.
 	fell.emit()

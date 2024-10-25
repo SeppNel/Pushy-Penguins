@@ -71,6 +71,7 @@ stream = ExtResource("5_fqumu")
 
 [node name="DeathBox" type="Area2D" parent="."]
 position = Vector2(0, 720)
+collision_mask = 3
 script = ExtResource("8_x28hn")
 
 [node name="WaterTexture" type="TextureRect" parent="DeathBox"]

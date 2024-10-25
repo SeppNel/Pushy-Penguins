@@ -6,11 +6,9 @@ signal start_game
 var playing : bool = false
 var hue : float = 0.00
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if $NewHighScore.visible: # Rainbow effect for NewHighscore
 		var shadowColor = Color.from_hsv(hue, 1, 1, 1)
