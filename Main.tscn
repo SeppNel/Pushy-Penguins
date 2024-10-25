@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7yhr1xpa33hc"]
+[gd_scene load_steps=14 format=3 uid="uid://c7yhr1xpa33hc"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_eliy0"]
 [ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="1_vecal"]
@@ -9,7 +9,15 @@
 [ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="5_fqumu"]
 [ext_resource type="Script" path="res://Music.gd" id="6_w83ls"]
 [ext_resource type="Script" path="res://DeathBox.gd" id="8_x28hn"]
+[ext_resource type="Texture2D" uid="uid://dxhgr6yrn6k0m" path="res://art/water2.png" id="10_3rv4m"]
 [ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="10_tx0cq"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_sr400"]
+frames = 2
+speed_scale = 2.0
+frame_0/texture = ExtResource("10_tx0cq")
+frame_1/texture = ExtResource("10_3rv4m")
+frame_1/duration = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4tne5"]
 size = Vector2(480, 80)
@@ -79,7 +87,7 @@ modulate = Color(1, 1, 1, 0.686275)
 texture_filter = 1
 offset_top = -128.0
 offset_right = 480.0
-texture = ExtResource("10_tx0cq")
+texture = SubResource("AnimatedTexture_sr400")
 expand_mode = 4
 stretch_mode = 1
 

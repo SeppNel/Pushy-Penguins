@@ -11,7 +11,7 @@ const ROTATION_CAP = 0.5
 const ROTATION_SPEED = 100.0  # Adjust for smoother or faster rotation
 const ROTATION_AV_CAP = 4.0
 #const ROTATION_SPRITES = ["up", "upright", "right", "downright", "down", "downleft", "left", "upleft", "up"]
-const ROTATION_SPRITES = ["up", "up", "up", "down", "down", "down", "down", "up", "up"]
+const ROTATION_SPRITES = ["up", "upright", "right", "down", "down", "down", "left", "upleft", "up"]
 
 var screen_size # Size of the game window.
 var initial_touch_position := Vector2.ZERO
@@ -77,6 +77,8 @@ func _input(event):
 		current_touch_position = event.position
 
 func sprite_rotation():
+	if linear_velocity.length() < Vector2(50,50).length():
+		return
 	var angle = rad_to_deg(linear_velocity.angle()) + 90 # +90 bcs 0 is right and I want it up
 	if angle < 0:
 		angle += 360
@@ -110,7 +112,8 @@ func start(pos):
 func _on_death_box_body_entered(body):
 	if body != self:
 		return
-		
+	
+	$CPUParticles2D.restart()
 	splash.emit(position, 1)
 	is_dead = true
 	hide() # Player disappears after being hit.

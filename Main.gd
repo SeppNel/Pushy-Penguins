@@ -63,6 +63,8 @@ func _on_mob_timer_timeout():
 		mob.get_node("CollisionShape2D").scale = Vector2(0.5, 0.5)
 	else:
 		mob.isBigPenguin = true
+		mob.get_node("Shadow").scale = Vector2(0.6, 0.45)
+		mob.get_node("Shadow").modulate = Color(1, 1, 1, 0.35)
 
 	# Set the mob's spawn position to a random location.
 	mob.position = Vector2(randf_range(0,480), -20)
