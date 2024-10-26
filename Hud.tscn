@@ -15,6 +15,7 @@ events = [SubResource("InputEventAction_qand2")]
 script = ExtResource("1_ch4na")
 
 [node name="FPS Counter" type="Label" parent="."]
+visible = false
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 41.0
@@ -97,9 +98,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -238.0
-offset_top = 119.0
+offset_top = 180.0
 offset_right = 242.0
-offset_bottom = 181.0
+offset_bottom = 242.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(1, 0, 0.0166664, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
