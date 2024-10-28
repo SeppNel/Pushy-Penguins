@@ -6,11 +6,16 @@ signal start_game
 var playing : bool = false
 var hue : float = 0.00
 var adView = null
-var initialScorePosition
+var ads_shown : int = 0
 
 func _ready():
-	initialScorePosition = $ScoreLabel.position
 	MobileAds.initialize()
+
+	#$ScoreLabel.position.y = DisplayServer.get_display_safe_area().position.y
+	#draw_debug_point()
+	#draw_debug_cutout()
+	#draw_debug_safe_area()
+	create_adView()
 
 func _process(delta):
 	if $NewHighScore.visible: # Rainbow effect for NewHighscore
@@ -38,8 +43,8 @@ func show_game_over():
 	playing = false
 	# Wait until the MessageTimer has counted down.
 	await $MessageTimer.timeout
-	$ScoreLabel.position.y += 100
-	create_ad()
+
+	show_ad()
 	
 	$Message.remove_theme_color_override("font_color")
 	$Message.add_theme_constant_override("shadow_offset_x", 6)
@@ -54,14 +59,14 @@ func update_score(score):
 	$ScoreLabel.text = str(score)
 
 func _on_start_button_pressed():
-	$ScoreLabel.position = initialScorePosition
 	$StartButton.hide()
 	$HighScoreMsg.hide()
 	$NewHighScore.hide()
 	playing = true
 	start_game.emit()
 	
-	destroy_ad()
+	if ads_shown > 0:
+		hide_ad()
 
 func _on_message_timer_timeout():
 	$Message.hide()
@@ -74,17 +79,55 @@ func show_origin_marker(pos):
 func hide_origin_marker():
 	$OriginMarker.hide()
 	
-func create_ad():
+func create_adView():
 	var unit_id : String
 	unit_id = "ca-app-pub-1191566520138423/9053040772"
 	#unit_id = "ca-app-pub-3940256099942544/6300978111" # Test Ad
 
-	adView = AdView.new(unit_id, AdSize.BANNER, AdPosition.Values.TOP)
+	adView = AdView.new(unit_id, AdSize.BANNER, AdPosition.Values.BOTTOM)
+	adView.hide()
+	await get_tree().create_timer(1).timeout
 	adView.load_ad(AdRequest.new())
 	
+func show_ad():
+	ads_shown += 1
+	#$ScoreLabel.position.y += adView.get_height()
+	adView.show()
+	adView.load_ad(AdRequest.new())
+
+func hide_ad():
+	adView.hide()
+	#$ScoreLabel.position.y -= adView.get_height()
+
 func destroy_ad():
 	if adView == null:
 		return
-		
+
 	adView.destroy()
 	adView = null
+
+func draw_debug_point():
+	var debug_point = ColorRect.new()
+	debug_point.size = Vector2(5,5)
+	debug_point.color = Color.RED
+	debug_point.position.x = get_viewport().get_visible_rect().size.x / 2
+	debug_point.position.y = DisplayServer.get_display_safe_area().position.y  # Set the position of the debug point
+	add_child(debug_point)
+
+func draw_debug_cutout():
+	var cutouts = DisplayServer.get_display_cutouts()
+	for r in cutouts:
+		var debug_point = ColorRect.new()
+		debug_point.size = r.size  # Set size from Rect2's size
+		debug_point.color = Color.RED
+		debug_point.position = r.position
+		add_child(debug_point)
+
+func draw_debug_safe_area():
+	var safe = DisplayServer.get_display_safe_area()
+	var debug_point = ColorRect.new()
+	debug_point.size = safe.size
+	debug_point.color = Color(0,0,1, 0.5)
+	debug_point.position = safe.position
+	add_child(debug_point)
+
