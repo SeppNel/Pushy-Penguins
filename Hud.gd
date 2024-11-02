@@ -10,11 +10,6 @@ var ads_shown : int = 0
 
 func _ready():
 	MobileAds.initialize()
-
-	#$ScoreLabel.position.y = DisplayServer.get_display_safe_area().position.y
-	#draw_debug_point()
-	#draw_debug_cutout()
-	#draw_debug_safe_area()
 	create_adView()
 
 func _process(delta):
@@ -54,6 +49,8 @@ func show_game_over():
 	# Make a one-shot timer and wait for it to finish.
 	await get_tree().create_timer(0.5).timeout
 	$StartButton.show()
+	$SettingsButton.show()
+	$LeaderboardButton.show()
 	
 func update_score(score):
 	$ScoreLabel.text = str(score)
@@ -62,6 +59,8 @@ func _on_start_button_pressed():
 	$StartButton.hide()
 	$HighScoreMsg.hide()
 	$NewHighScore.hide()
+	$SettingsButton.hide()
+	$LeaderboardButton.hide()
 	playing = true
 	start_game.emit()
 	
@@ -106,28 +105,52 @@ func destroy_ad():
 	adView.destroy()
 	adView = null
 
-func draw_debug_point():
-	var debug_point = ColorRect.new()
-	debug_point.size = Vector2(5,5)
-	debug_point.color = Color.RED
-	debug_point.position.x = get_viewport().get_visible_rect().size.x / 2
-	debug_point.position.y = DisplayServer.get_display_safe_area().position.y  # Set the position of the debug point
-	add_child(debug_point)
+func toggle_non_overlay_visibility():
+	$SettingsButton.visible = !$SettingsButton.visible
+	$LeaderboardButton.visible = !$LeaderboardButton.visible
+	$Message.visible = !$Message.visible
+	$HighScoreMsg.visible = !$HighScoreMsg.visible
+	$StartButton.visible = !$StartButton.visible
+	$ScoreLabel.visible = !$ScoreLabel.visible
 
-func draw_debug_cutout():
-	var cutouts = DisplayServer.get_display_cutouts()
-	for r in cutouts:
-		var debug_point = ColorRect.new()
-		debug_point.size = r.size  # Set size from Rect2's size
-		debug_point.color = Color.RED
-		debug_point.position = r.position
-		add_child(debug_point)
+func toggle_settings():
+	toggle_non_overlay_visibility()
+	$Settings.visible = !$Settings.visible
 
-func draw_debug_safe_area():
-	var safe = DisplayServer.get_display_safe_area()
-	var debug_point = ColorRect.new()
-	debug_point.size = safe.size
-	debug_point.color = Color(0,0,1, 0.5)
-	debug_point.position = safe.position
-	add_child(debug_point)
+
+func _on_leaderboard_button_pressed():
+	toggle_non_overlay_visibility()
+	load_leaderboard()
+	$Leaderboard.show()
+
+
+func _on_close_leaderboard_button_pressed():
+	var children = $Leaderboard/ScrollContainer/VBoxContainer.get_children()
+	for child in children:
+		if child is Label:
+			child.free()
+	
+	toggle_non_overlay_visibility()
+	$Leaderboard.hide()
+
+
+func load_leaderboard():
+	$HTTPRequest.request_completed.connect(_on_leaderboard_request_completed)
+	$HTTPRequest.request("http://pertusa.myftp.org/.resources/php/ppp/leaderboard_get.php")
+
+func _on_leaderboard_request_completed(result, response_code, headers, body):
+	var lb = JSON.parse_string(body.get_string_from_utf8())
+	var i = 1
+	for name in lb:
+		var score = lb[name]
+
+		var label = Label.new()
+		label.text = str(i) + "º - " + str(name) + ": " + str(score)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var f = load("res://fonts/Xolonium-Regular.ttf") as FontFile
+		label.add_theme_font_override("font", f)
+		label.set("theme_override_font_sizes/font_size", 30)
+		
+		$Leaderboard/ScrollContainer/VBoxContainer.add_child(label)
+		i += 1
 

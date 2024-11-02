@@ -33,6 +33,8 @@ func game_over():
 
 	if highScoreUpdated:
 		$HUD.update_high_score(highScore)
+		var name = $HUD/Settings/Name/NameField.text
+		$HTTPRequest.request("http://pertusa.myftp.org/.resources/php/ppp/leaderboard_set.php?name=" + str(name) + "&score=" + str(highScore))
 		$HUD/NewHighScore.show()
 		save()
 
@@ -107,6 +109,7 @@ func _on_player_touch(pos):
 func save():
 	var save_dict = {
 		"high_score" : highScore,
+		"name" : $HUD/Settings/Name/NameField.text,
 	}
 
 	var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
@@ -131,6 +134,7 @@ func save_load():
 	# Get the data from the JSON object
 	var data = json.get_data()
 	highScore = data["high_score"]
+	$HUD/Settings/Name/NameField.text = data["name"]
 
 func splash(pos, size):
 	var water = preload("res://Water_Splash.tscn")
