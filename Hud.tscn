@@ -271,8 +271,8 @@ icon = ExtResource("7_ebpno")
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="SettingsButton" to="." method="toggle_settings"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
-[connection signal="pressed" from="Settings/CloseSettingsButton" to="." method="toggle_settings"]
+[connection signal="pressed" from="Settings/CloseSettingsButton" to="." method="_on_close_settings_button_pressed"]
 [connection signal="pressed" from="Leaderboard/CloseLeaderboardButton" to="." method="_on_close_leaderboard_button_pressed"]

@@ -2,6 +2,7 @@ extends CanvasLayer
 
 # Notifies `Main` node that the button has been pressed
 signal start_game
+signal settings_changed
 
 var playing : bool = false
 var hue : float = 0.00
@@ -113,10 +114,14 @@ func toggle_non_overlay_visibility():
 	$StartButton.visible = !$StartButton.visible
 	$ScoreLabel.visible = !$ScoreLabel.visible
 
-func toggle_settings():
+func _on_settings_button_pressed():
 	toggle_non_overlay_visibility()
-	$Settings.visible = !$Settings.visible
+	$Settings.show()
 
+func _on_close_settings_button_pressed():
+	toggle_non_overlay_visibility()
+	$Settings.hide()
+	settings_changed.emit()
 
 func _on_leaderboard_button_pressed():
 	toggle_non_overlay_visibility()

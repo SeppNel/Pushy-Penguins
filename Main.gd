@@ -16,6 +16,7 @@ func _ready():
 	defaultMobTimerWaitTime = $MobTimer.wait_time
 	$HUD.update_high_score(highScore)
 	$Player.splash.connect(splash)
+	$HUD.settings_changed.connect(save)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
