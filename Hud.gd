@@ -2,7 +2,7 @@ extends CanvasLayer
 
 # Notifies `Main` node that the button has been pressed
 signal start_game
-signal settings_changed
+signal settings_changed(reset : bool)
 
 var playing : bool = false
 var hue : float = 0.00
@@ -121,7 +121,7 @@ func _on_settings_button_pressed():
 func _on_close_settings_button_pressed():
 	toggle_non_overlay_visibility()
 	$Settings.hide()
-	settings_changed.emit()
+	settings_changed.emit(false)
 
 func _on_leaderboard_button_pressed():
 	toggle_non_overlay_visibility()
@@ -159,3 +159,9 @@ func _on_leaderboard_request_completed(result, response_code, headers, body):
 		$Leaderboard/ScrollContainer/VBoxContainer.add_child(label)
 		i += 1
 
+
+
+func _on_reset_score_button_pressed():
+	update_high_score(0)
+	settings_changed.emit(true)
+	

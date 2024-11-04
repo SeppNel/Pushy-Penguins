@@ -219,6 +219,22 @@ offset_bottom = 68.0
 grow_horizontal = 0
 icon = ExtResource("7_ebpno")
 
+[node name="ResetScoreButton" type="Button" parent="Settings"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = 43.0
+offset_right = 104.0
+offset_bottom = 89.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_iuara")
+theme_override_font_sizes/font_size = 31
+text = "Reset HighScore"
+
 [node name="Leaderboard" type="CanvasLayer" parent="."]
 visible = false
 
@@ -275,4 +291,5 @@ icon = ExtResource("7_ebpno")
 [connection signal="pressed" from="LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
 [connection signal="pressed" from="Settings/CloseSettingsButton" to="." method="_on_close_settings_button_pressed"]
+[connection signal="pressed" from="Settings/ResetScoreButton" to="." method="_on_reset_score_button_pressed"]
 [connection signal="pressed" from="Leaderboard/CloseLeaderboardButton" to="." method="_on_close_leaderboard_button_pressed"]

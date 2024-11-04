@@ -16,7 +16,7 @@ func _ready():
 	defaultMobTimerWaitTime = $MobTimer.wait_time
 	$HUD.update_high_score(highScore)
 	$Player.splash.connect(splash)
-	$HUD.settings_changed.connect(save)
+	$HUD.settings_changed.connect(save_settings)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -117,7 +117,6 @@ func save():
 	var json_string = JSON.stringify(save_dict)
 	save_file.store_line(json_string)
 
-
 func save_load():
 	if not FileAccess.file_exists("user://savegame.save"):
 		return # Error! We don't have a save to load.
@@ -146,3 +145,8 @@ func splash(pos, size):
 	instance.scale_amount_min = size
 	instance.emitting = true
 	add_child(instance)
+
+func save_settings(reset: bool):
+	if reset:
+		highScore = 0
+	save()
