@@ -12,6 +12,7 @@ var ads_shown : int = 0
 func _ready():
 	MobileAds.initialize()
 	create_adView()
+	$HTTPRequest.request_completed.connect(_on_leaderboard_request_completed)
 
 func _process(delta):
 	if $NewHighScore.visible: # Rainbow effect for NewHighscore
@@ -140,7 +141,6 @@ func _on_close_leaderboard_button_pressed():
 
 
 func load_leaderboard():
-	$HTTPRequest.request_completed.connect(_on_leaderboard_request_completed)
 	$HTTPRequest.request("http://pertusa.myftp.org/.resources/php/ppp/leaderboard_get.php")
 
 func _on_leaderboard_request_completed(result, response_code, headers, body):
