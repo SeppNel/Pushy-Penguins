@@ -34,10 +34,20 @@ func game_over():
 
 	if highScoreUpdated:
 		$HUD.update_high_score(highScore)
-		var name = $HUD/Settings/Name/NameField.text
-		$HTTPRequest.request("http://pertusa.myftp.org/.resources/php/ppp/leaderboard_set.php?name=" + str(name) + "&score=" + str(highScore))
+		send_highscore_leaderboard()
 		$HUD/NewHighScore.show()
 		save()
+
+func send_highscore_leaderboard():
+	var url = "http://pertusa.myftp.org/.resources/php/ppp/leaderboard_set.php"
+	var data = {
+		"name" : $HUD/Settings/Name/NameField.text,
+		"score" : highScore,
+	}
+	
+	var json = JSON.stringify(data)
+	var headers = ["Content-Type: application/json"]
+	$HTTPRequest.request(url, headers, HTTPClient.METHOD_POST, json)
 
 func new_game():
 	score = 0
