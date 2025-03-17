@@ -10,6 +10,3 @@ func _ready():
 	$WaterTexture.position.y = screen_size.y * (1 - WATER_RATIO) - screen_size.y
 	$CollisionShape2D.shape.extents = Vector2(screen_size.x, screen_size.y * WATER_RATIO / 2 - 25)
 	$CollisionShape2D.position.y = -($CollisionShape2D.shape.get_rect().size.y) / 2
-
-func _process(delta):
-	pass

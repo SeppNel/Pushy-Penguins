@@ -19,7 +19,3 @@ func on_deathbox_entered(body):
 	var splash_size = 2 if isBigPenguin else 1
 	splash.emit(position, splash_size)
 	queue_free()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

@@ -1,6 +1,7 @@
 extends Node
 
 @export var mob_scene: PackedScene
+const water = preload("res://Water_Splash.tscn")
 
 const BIG_PENGUIN_CHANCE = 10
 
@@ -17,10 +18,6 @@ func _ready():
 	$HUD.update_high_score(highScore)
 	$Player.splash.connect(splash)
 	$HUD.settings_changed.connect(save_settings)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 func game_over():
 	$StartTimer.stop()
@@ -80,7 +77,7 @@ func _on_mob_timer_timeout():
 		mob.get_node("Shadow").modulate = Color(1, 1, 1, 0.35)
 
 	# Set the mob's spawn position to a random location.
-	mob.position = Vector2(randf_range(0,480), -20)
+	mob.position = Vector2(randf_range(0,480), -22)
 
 	# Choose the velocity for the mob.
 	var velocity = Vector2(0.0, randf_range(150.0, 250.0))
@@ -89,7 +86,6 @@ func _on_mob_timer_timeout():
 
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
-	move_child(mob, -2)
 
 
 func _on_score_timer_timeout():
@@ -147,7 +143,6 @@ func save_load():
 	$HUD/Settings/Name/NameField.text = data["name"]
 
 func splash(pos, size):
-	var water = preload("res://Water_Splash.tscn")
 	var instance = water.instantiate()
 	instance.position = pos
 	instance.position.y += 10
