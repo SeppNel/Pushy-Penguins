@@ -3,6 +3,8 @@ extends Node
 @export var mob_scene: PackedScene
 const water = preload("res://Water_Splash.tscn")
 
+@onready var DeathBox_ref = $DeathBox
+
 const BIG_PENGUIN_CHANCE = 10
 
 var score
@@ -64,7 +66,7 @@ func new_game():
 func _on_mob_timer_timeout():
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
-	
+	mob.init(DeathBox_ref)
 	mob.splash.connect(splash)
 	
 	# Small penguin if true, big if false

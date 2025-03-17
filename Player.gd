@@ -12,6 +12,9 @@ const ROTATION_SPEED = 100.0  # Adjust for smoother or faster rotation
 const ROTATION_AV_CAP = 4.0
 #const ROTATION_SPRITES = ["up", "upright", "right", "downright", "down", "downleft", "left", "upleft", "up"]
 const ROTATION_SPRITES = ["up", "upright", "right", "down", "down", "down", "left", "upleft", "up"]
+const ROTATION_SPRITE_MIN_SPEED = 70.7107 # Magintude of Vector2(50,50)
+
+@onready var sprite_ref = $AnimatedSprite2D
 
 var screen_size # Size of the game window.
 var initial_touch_position := Vector2.ZERO
@@ -24,14 +27,13 @@ var start_position
 func _ready():
 	screen_size = get_viewport_rect().size
 	process_mode = Node.PROCESS_MODE_DISABLED
-	$AnimatedSprite2D.play("down")
+	sprite_ref.play("down")
 	hide()
 
 func handleRotation():
 	# Smooth rotation to 0 (Look forward)
 	rotation = clamp(rotation, -ROTATION_CAP, ROTATION_CAP)
-	var angle_diff = angle_difference(rotation, 0)
-	var torque = angle_diff * ROTATION_SPEED
+	var torque = angle_difference(rotation, 0) * ROTATION_SPEED
 	apply_torque_impulse(torque)
 
 	# Clamping like before causes weird behaivour, so manual it is
@@ -77,13 +79,13 @@ func _input(event):
 		current_touch_position = event.position
 
 func sprite_rotation():
-	if linear_velocity.length() < Vector2(50,50).length():
+	if linear_velocity.length() < ROTATION_SPRITE_MIN_SPEED:
 		return
 	var angle = rad_to_deg(linear_velocity.angle()) + 90 # +90 bcs 0 is right and I want it up
 	if angle < 0:
 		angle += 360
 	var angle_index = round(angle / 45)
-	$AnimatedSprite2D.play(ROTATION_SPRITES[angle_index])
+	sprite_ref.play(ROTATION_SPRITES[angle_index])
 
 func _process(delta):
 	if is_touching and current_touch_position != null and !is_dead :
