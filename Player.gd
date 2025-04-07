@@ -90,16 +90,16 @@ func sprite_rotation():
 func _process(delta):
 	if is_touching and current_touch_position != null and !is_dead :
 		var direction = current_touch_position - initial_touch_position
-		apply_joystick_force(direction)
+		apply_joystick_force(delta, direction)
 		
 	sprite_rotation()
 
-func apply_joystick_force(direction):
+func apply_joystick_force(delta, direction):
 	# Normalize direction to get the direction vector
 	var normalized_direction = direction.normalized()
 	var force_magnitude = direction.length()
 	
-	var force = normalized_direction * force_magnitude * 0.8 # Adjust the multiplier as needed
+	var force = normalized_direction * force_magnitude * delta * 60 # Adjust the multiplier as needed
 	# Apply force to the character
 	apply_force(force)
 
