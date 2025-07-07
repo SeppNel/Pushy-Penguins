@@ -1,24 +1,25 @@
 extends Node
 
-@export var mob_scene: PackedScene
-const water = preload("res://Water_Splash.tscn")
+const mob_scene = preload("res://Mob.tscn")
+const SaveManager = preload("res://static/SaveManager.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
 const BIG_PENGUIN_CHANCE = 10
 
-var score
-var highScore = 0
+var score: int
+var highScore: int = 0
 var difficultyFactor = 0
 var defaultMobTimerWaitTime
 var highScoreUpdated : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	save_load()
+	highScore = SaveManager.getHighScore()
+	$HUD/Settings/Name/NameField.text = SaveManager.getUserName()
+	
 	defaultMobTimerWaitTime = $MobTimer.wait_time
 	$HUD.update_high_score(highScore)
-	$Player.splash.connect(splash)
 	$HUD.settings_changed.connect(save_settings)
 
 func game_over():
@@ -35,7 +36,7 @@ func game_over():
 		$HUD.update_high_score(highScore)
 		send_highscore_leaderboard()
 		$HUD/NewHighScore.show()
-		save()
+		SaveManager.saveHighScore(highScore)
 
 func send_highscore_leaderboard():
 	var url = "http://pertusa.myftp.org/.resources/php/ppp/leaderboard_set.php"
@@ -67,7 +68,6 @@ func _on_mob_timer_timeout():
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
 	mob.init(DeathBox_ref)
-	mob.splash.connect(splash)
 	
 	# Small penguin if true, big if false
 	if randi_range(1, 100) < 100 - (BIG_PENGUIN_CHANCE + 5 * difficultyFactor):
@@ -115,45 +115,7 @@ func _on_player_touch(pos):
 	else:
 		$HUD.hide_origin_marker()
 
-func save():
-	var save_dict = {
-		"high_score" : highScore,
-		"name" : $HUD/Settings/Name/NameField.text,
-	}
-
-	var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
-	var json_string = JSON.stringify(save_dict)
-	save_file.store_line(json_string)
-
-func save_load():
-	if not FileAccess.file_exists("user://savegame.save"):
-		return # Error! We don't have a save to load.
-
-	var save_file = FileAccess.open("user://savegame.save", FileAccess.READ)
-	var json_string = save_file.get_line()
-
-	# Creates the helper class to interact with JSON
-	var json = JSON.new()
-
-	# Check if there is any error while parsing the JSON string
-	if not json.parse(json_string) == OK:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
-
-	# Get the data from the JSON object
-	var data = json.get_data()
-	highScore = data["high_score"]
-	$HUD/Settings/Name/NameField.text = data["name"]
-
-func splash(pos, size):
-	var instance = water.instantiate()
-	instance.position = pos
-	instance.position.y += 10
-	instance.scale = Vector2(size,size)
-	instance.scale_amount_min = size
-	instance.emitting = true
-	add_child(instance)
-
 func save_settings(reset: bool):
 	if reset:
 		highScore = 0
-	save()
+	SaveManager.saveName($HUD/Settings/Name/NameField.text)

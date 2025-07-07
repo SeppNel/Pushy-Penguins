@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2e7okgajipy4"]
+[gd_scene load_steps=11 format=3 uid="uid://d2e7okgajipy4"]
 
 [ext_resource type="Script" path="res://Hud.gd" id="1_ch4na"]
 [ext_resource type="Script" path="res://FPS Counter.gd" id="2_bv3ww"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c3h8q8qd8768q" path="res://art/icons/settings.png" id="4_bwt0u"]
 [ext_resource type="Texture2D" uid="uid://frvnss327a2s" path="res://art/icons/leaderboard_icon.png" id="5_n328g"]
 [ext_resource type="Texture2D" uid="uid://oh77tpae2q60" path="res://art/icons/close.png" id="7_ebpno"]
+[ext_resource type="Script" path="res://missions_container.gd" id="8_5jwn7"]
 
 [sub_resource type="InputEventAction" id="InputEventAction_qand2"]
 action = &"start_game"
@@ -54,9 +55,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -240.0
-offset_top = -178.0
+offset_top = -241.0
 offset_right = 240.0
-offset_bottom = 62.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.298039)
@@ -78,9 +79,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -240.0
-offset_top = -261.0
+offset_top = -348.0
 offset_right = 240.0
-offset_bottom = -199.0
+offset_bottom = -286.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.372549)
@@ -124,15 +125,31 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -100.0
-offset_top = -198.0
+offset_top = -285.0
 offset_right = 100.0
-offset_bottom = -98.0
+offset_bottom = -185.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_iuara")
 theme_override_font_sizes/font_size = 64
 shortcut = SubResource("Shortcut_vfrcp")
 text = "Start"
+
+[node name="MissionsButton" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -172.0
+offset_right = 100.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_iuara")
+theme_override_font_sizes/font_size = 64
+text = "Missions"
 
 [node name="SettingsButton" type="Button" parent="."]
 anchors_preset = 1
@@ -284,12 +301,68 @@ offset_bottom = 68.0
 grow_horizontal = 0
 icon = ExtResource("7_ebpno")
 
+[node name="Missions" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Missions"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.529412)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Missions"]
+layout_direction = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Missions/ScrollContainer"]
+layout_mode = 2
+
+[node name="Title" type="RichTextLabel" parent="Missions/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_iuara")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[center][u]Missions[/u][/center]"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="Missions/ScrollContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="MissionsContainer" type="VBoxContainer" parent="Missions/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("8_5jwn7")
+
+[node name="CloseMissionsButton" type="Button" parent="Missions"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -65.0
+offset_top = 20.0
+offset_right = -15.0
+offset_bottom = 68.0
+grow_horizontal = 0
+icon = ExtResource("7_ebpno")
+
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="MissionsButton" to="." method="_on_missions_button_pressed"]
 [connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
 [connection signal="pressed" from="Settings/CloseSettingsButton" to="." method="_on_close_settings_button_pressed"]
 [connection signal="pressed" from="Settings/ResetScoreButton" to="." method="_on_reset_score_button_pressed"]
 [connection signal="pressed" from="Leaderboard/CloseLeaderboardButton" to="." method="_on_close_leaderboard_button_pressed"]
+[connection signal="pressed" from="Missions/CloseMissionsButton" to="." method="_on_close_missions_button_pressed"]

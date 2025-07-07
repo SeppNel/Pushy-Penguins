@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdoldjopxlen6"]
+
+[ext_resource type="FontFile" uid="uid://bk6w82hh0dgnv" path="res://fonts/Xolonium-Regular.ttf" id="1_aaohx"]
+[ext_resource type="Texture2D" uid="uid://dk2oikuefpwsn" path="res://art/icons/check_empty.png" id="2_04xin"]
+
+[node name="Mission1" type="HBoxContainer"]
+
+[node name="Margin" type="Control" parent="."]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_aaohx")
+theme_override_font_sizes/font_size = 25
+text = "Mission 1"
+
+[node name="CheckTexture" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_04xin")
+expand_mode = 2
+
+[node name="Margin2" type="Control" parent="."]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_aaohx")
+theme_override_font_sizes/font_size = 25
+text = "Start"
+
+[node name="Margin3" type="Control" parent="."]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2

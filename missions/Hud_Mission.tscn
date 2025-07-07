@@ -1,0 +1,157 @@
+[gd_scene load_steps=7 format=3 uid="uid://cnewpfj0saicm"]
+
+[ext_resource type="Script" path="res://missions/Hud_Mission.gd" id="1_sn8wy"]
+[ext_resource type="Script" path="res://FPS Counter.gd" id="2_pb3vh"]
+[ext_resource type="FontFile" uid="uid://bk6w82hh0dgnv" path="res://fonts/Xolonium-Regular.ttf" id="3_hphft"]
+[ext_resource type="Texture2D" uid="uid://ff66shhhik16" path="res://art/origin_marker.png" id="6_q8iu2"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_qand2"]
+action = &"start_game"
+
+[sub_resource type="Shortcut" id="Shortcut_vfrcp"]
+events = [SubResource("InputEventAction_qand2")]
+
+[node name="HUD_Mission" type="CanvasLayer"]
+script = ExtResource("1_sn8wy")
+
+[node name="FpsCounter" type="Label" parent="."]
+visible = false
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 41.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 25
+text = "FPS"
+script = ExtResource("2_pb3vh")
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 25.0
+offset_right = 100.0
+offset_bottom = 103.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Message" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -241.0
+offset_right = 240.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.298039)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+text = "Pushy Penguins!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CompleteLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -238.0
+offset_top = 110.0
+offset_right = 242.0
+offset_bottom = 372.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(1, 0, 0.0166664, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+text = "Mission Complete!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="NextButton" type="Button" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -397.0
+offset_right = 100.0
+offset_bottom = -297.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+shortcut = SubResource("Shortcut_vfrcp")
+text = "Next"
+
+[node name="RetryButton" type="Button" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -285.0
+offset_right = 100.0
+offset_bottom = -185.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+shortcut = SubResource("Shortcut_vfrcp")
+text = "Retry"
+
+[node name="BackButton" type="Button" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -172.0
+offset_right = 100.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_hphft")
+theme_override_font_sizes/font_size = 64
+text = "Back"
+
+[node name="MessageTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="OriginMarker" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.592157)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("6_q8iu2")
+
+[connection signal="pressed" from="RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]

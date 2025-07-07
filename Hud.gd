@@ -1,5 +1,16 @@
 extends CanvasLayer
 
+const SaveManager = preload("res://static/SaveManager.gd")
+const Mission_Entry = preload("res://missions/List_Entry_Mission.tscn")
+const Utils = preload("res://static/utils.gd")
+
+const GreenCheckTexture = preload("res://art/icons/check_filled.png")
+
+const MissionNames = {
+	1: "Survive Lv. 1",
+	2: "Survive Lv. 2"
+}
+
 # Notifies `Main` node that the button has been pressed
 signal start_game
 signal settings_changed(reset : bool)
@@ -12,6 +23,7 @@ var ads_shown : int = 0
 func _ready():
 	MobileAds.initialize()
 	create_adView()
+	populateMissions()
 	$HTTPRequest.request_completed.connect(_on_leaderboard_request_completed)
 
 func _process(delta):
@@ -27,10 +39,10 @@ func show_message(text):
 	$Message.text = text
 	$Message.show()
 	$MessageTimer.start()
-	
+
 func update_high_score(score : int):
 	$HighScoreMsg.text = "HighScore: " + str(score)
-	
+
 func show_game_over():
 	var fontColor : Color = Color(1, 0 , 0, 1)
 	$Message.add_theme_color_override("font_color", fontColor)
@@ -53,21 +65,15 @@ func show_game_over():
 	$StartButton.show()
 	$SettingsButton.show()
 	$LeaderboardButton.show()
-	
+	$MissionsButton.show()
+
 func update_score(score):
 	$ScoreLabel.text = str(score)
 
 func _on_start_button_pressed():
-	$StartButton.hide()
-	$HighScoreMsg.hide()
-	$NewHighScore.hide()
-	$SettingsButton.hide()
-	$LeaderboardButton.hide()
+	hideAllButScore()
 	playing = true
 	start_game.emit()
-	
-	if ads_shown > 0:
-		hide_ad()
 
 func _on_message_timer_timeout():
 	$Message.hide()
@@ -76,10 +82,10 @@ func show_origin_marker(pos):
 	if playing:
 		$OriginMarker.position = pos
 		$OriginMarker.show()
-	
+
 func hide_origin_marker():
 	$OriginMarker.hide()
-	
+
 func create_adView():
 	var unit_id : String
 	unit_id = "ca-app-pub-1191566520138423/9053040772"
@@ -114,6 +120,7 @@ func toggle_non_overlay_visibility():
 	$HighScoreMsg.visible = !$HighScoreMsg.visible
 	$StartButton.visible = !$StartButton.visible
 	$ScoreLabel.visible = !$ScoreLabel.visible
+	$MissionsButton.visible = !$MissionsButton.visible
 
 func _on_settings_button_pressed():
 	toggle_non_overlay_visibility()
@@ -129,7 +136,6 @@ func _on_leaderboard_button_pressed():
 	load_leaderboard()
 	$Leaderboard.show()
 
-
 func _on_close_leaderboard_button_pressed():
 	var children = $Leaderboard/ScrollContainer/VBoxContainer.get_children()
 	for child in children:
@@ -138,7 +144,6 @@ func _on_close_leaderboard_button_pressed():
 	
 	toggle_non_overlay_visibility()
 	$Leaderboard.hide()
-
 
 func load_leaderboard():
 	$HTTPRequest.request("http://pertusa.myftp.org/.resources/php/ppp/leaderboard_get.php")
@@ -159,9 +164,42 @@ func _on_leaderboard_request_completed(result, response_code, headers, body):
 		$Leaderboard/ScrollContainer/VBoxContainer.add_child(label)
 		i += 1
 
-
-
 func _on_reset_score_button_pressed():
 	update_high_score(0)
 	settings_changed.emit(true)
+
+func hideAllButScore():
+	$StartButton.hide()
+	$HighScoreMsg.hide()
+	$NewHighScore.hide()
+	$SettingsButton.hide()
+	$LeaderboardButton.hide()
+	$MissionsButton.hide()
 	
+	if ads_shown > 0:
+		hide_ad()
+
+func _on_missions_button_pressed() -> void:
+	toggle_non_overlay_visibility()
+	$Missions.show()
+
+func _on_close_missions_button_pressed() -> void:
+	toggle_non_overlay_visibility()
+	$Missions.hide()
+
+func populateMissions():
+	var missionCount = Utils.get_mission_count()
+	var missions_c = $Missions/ScrollContainer/VBoxContainer/MissionsContainer
+	
+	for i: int in range(1, missionCount + 1):
+		var instance = Mission_Entry.instantiate()
+		if i in MissionNames:
+			instance.get_node("Label").text = MissionNames[i]
+		else:
+			instance.get_node("Label").text = "Mission " + str(i)
+		if SaveManager.isMissionCompleted(i):
+			instance.get_node("CheckTexture").texture = GreenCheckTexture
+		instance.get_node("Button").pressed.connect(
+			Callable(missions_c, "_on_mission_start_pressed").bind(i)
+		)
+		missions_c.add_child(instance)

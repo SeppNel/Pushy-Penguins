@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-signal splash
+const water = preload("res://Water_Splash.tscn")
 
 var isBigPenguin : bool = false
 
@@ -18,6 +18,15 @@ func on_deathbox_entered(body):
 	var splash_size = 1
 	if isBigPenguin:
 		splash_size = 2
-
-	splash.emit(position, splash_size)
+		
+	instanciateSplash(splash_size)
 	queue_free()
+
+func instanciateSplash(splash_size: int):
+	var instance = water.instantiate()
+	instance.position = position
+	instance.position.y += 10
+	instance.scale = Vector2(splash_size,splash_size)
+	instance.scale_amount_min = splash_size
+	instance.emitting = true
+	add_sibling(instance)

@@ -1,8 +1,9 @@
 extends RigidBody2D
 
+const water = preload("res://Water_Splash.tscn")
+
 signal fell
 signal touch(pos)
-signal splash(pos, size)
 
 const SPEED_LIMIT = 1000
 const MIN_SCREEN_CLAMP_OFFSET = Vector2(20, 30) # Left, Top
@@ -116,9 +117,19 @@ func _on_death_box_body_entered(body):
 		return
 	
 	$CPUParticles2D.restart()
-	splash.emit(position, 1)
+	instanciateSplash()
 	is_dead = true
 	hide() # Player disappears after being hit.
 	fell.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
 	$CollisionShape2D.set_deferred("disabled", true)
+
+func instanciateSplash():
+	var splash_size: int = 1
+	var instance = water.instantiate()
+	instance.position = position
+	instance.position.y += 10
+	instance.scale = Vector2(splash_size,splash_size)
+	instance.scale_amount_min = splash_size
+	instance.emitting = true
+	add_sibling(instance)

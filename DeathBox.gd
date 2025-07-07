@@ -1,6 +1,6 @@
 extends Area2D
 
-const WATER_RATIO = 0.2
+@export var WATER_RATIO = 0.2
 
 var screen_size
 
