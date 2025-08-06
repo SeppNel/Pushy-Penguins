@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://d2e7okgajipy4"]
 
-[ext_resource type="Script" path="res://Hud.gd" id="1_ch4na"]
-[ext_resource type="Script" path="res://FPS Counter.gd" id="2_bv3ww"]
+[ext_resource type="Script" uid="uid://c68vk84haavqy" path="res://Hud.gd" id="1_ch4na"]
+[ext_resource type="Script" uid="uid://fscd2u88kivg" path="res://FPS Counter.gd" id="2_bv3ww"]
 [ext_resource type="FontFile" uid="uid://bk6w82hh0dgnv" path="res://fonts/Xolonium-Regular.ttf" id="2_iuara"]
 [ext_resource type="Texture2D" uid="uid://ff66shhhik16" path="res://art/origin_marker.png" id="3_74bq3"]
 [ext_resource type="Texture2D" uid="uid://c3h8q8qd8768q" path="res://art/icons/settings.png" id="4_bwt0u"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cnewpfj0saicm"]
 
-[ext_resource type="Script" path="res://missions/Hud_Mission.gd" id="1_sn8wy"]
-[ext_resource type="Script" path="res://FPS Counter.gd" id="2_pb3vh"]
+[ext_resource type="Script" uid="uid://8n8jlue47iw5" path="res://missions/Hud_Mission.gd" id="1_sn8wy"]
+[ext_resource type="Script" uid="uid://fscd2u88kivg" path="res://FPS Counter.gd" id="2_pb3vh"]
 [ext_resource type="FontFile" uid="uid://bk6w82hh0dgnv" path="res://fonts/Xolonium-Regular.ttf" id="3_hphft"]
 [ext_resource type="Texture2D" uid="uid://ff66shhhik16" path="res://art/origin_marker.png" id="6_q8iu2"]
 
