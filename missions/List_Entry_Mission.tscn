@@ -6,7 +6,7 @@
 [node name="Mission1" type="HBoxContainer"]
 
 [node name="Margin" type="Control" parent="."]
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="."]
@@ -22,7 +22,7 @@ texture = ExtResource("2_04xin")
 expand_mode = 2
 
 [node name="Margin2" type="Control" parent="."]
-custom_minimum_size = Vector2(10, 0)
+custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
 [node name="Button" type="Button" parent="."]
@@ -33,5 +33,5 @@ theme_override_font_sizes/font_size = 25
 text = "Start"
 
 [node name="Margin3" type="Control" parent="."]
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2

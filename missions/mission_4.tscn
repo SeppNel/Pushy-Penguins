@@ -1,0 +1,153 @@
+[gd_scene load_steps=18 format=3 uid="uid://ga2hqvuo72o0"]
+
+[ext_resource type="Texture2D" uid="uid://c3rbq7njvoaf0" path="res://art/ice_floor3.png" id="1_ha838"]
+[ext_resource type="Script" path="res://missions/mission_4.gd" id="1_q7lyq"]
+[ext_resource type="PackedScene" uid="uid://cnewpfj0saicm" path="res://missions/Hud_Mission.tscn" id="3_2tjwq"]
+[ext_resource type="AudioStream" uid="uid://532t1b3ql5ff" path="res://sound/bgm.mp3" id="3_ogl47"]
+[ext_resource type="Script" path="res://Music.gd" id="4_22m1y"]
+[ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="5_uw5wq"]
+[ext_resource type="Script" path="res://DeathBox.gd" id="6_u0p3i"]
+[ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="7_njwnj"]
+[ext_resource type="Texture2D" uid="uid://dxhgr6yrn6k0m" path="res://art/water2.png" id="8_xvj8t"]
+[ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="9_nbnu4"]
+[ext_resource type="PackedScene" uid="uid://cwra0y6rv27wm" path="res://missions/circle_path_2d.tscn" id="11_cmu20"]
+[ext_resource type="PackedScene" uid="uid://br3kfb1p5grst" path="res://missions/DummyPenguin.tscn" id="12_rkyya"]
+[ext_resource type="Script" path="res://missions/follow_line_2d.gd" id="13_r0wvd"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_2lshl"]
+frames = 2
+speed_scale = 2.0
+frame_0/texture = ExtResource("7_njwnj")
+frame_1/texture = ExtResource("8_xvj8t")
+frame_1/duration = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xy06k"]
+size = Vector2(480, 80)
+
+[sub_resource type="Curve2D" id="Curve2D_6jqhv"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 19.509, -98.0785, 0, 0, 0, 0, 38.2683, -92.3879, 0, 0, 0, 0, 55.557, -83.147, 0, 0, 0, 0, 70.7107, -70.7107, 0, 0, 0, 0, 83.147, -55.557, 0, 0, 0, 0, 92.3879, -38.2683, 0, 0, 0, 0, 98.0785, -19.509, 0, 0, 0, 0, 100, 4.37114e-06, 0, 0, 0, 0, 98.0785, 19.509, 0, 0, 0, 0, 92.388, 38.2683, 0, 0, 0, 0, 83.147, 55.557, 0, 0, 0, 0, 70.7107, 70.7107, 0, 0, 0, 0, 55.557, 83.147, 0, 0, 0, 0, 38.2683, 92.3879, 0, 0, 0, 0, 19.509, 98.0785, 0, 0, 0, 0, -8.74228e-06, 100, 0, 0, 0, 0, -19.509, 98.0785, 0, 0, 0, 0, -38.2683, 92.3879, 0, 0, 0, 0, -55.557, 83.147, 0, 0, 0, 0, -70.7107, 70.7107, 0, 0, 0, 0, -83.1469, 55.557, 0, 0, 0, 0, -92.3879, 38.2684, 0, 0, 0, 0, -98.0785, 19.509, 0, 0, 0, 0, -100, -1.19249e-06, 0, 0, 0, 0, -98.0785, -19.509, 0, 0, 0, 0, -92.3879, -38.2684, 0, 0, 0, 0, -83.147, -55.557, 0, 0, 0, 0, -70.7107, -70.7107, 0, 0, 0, 0, -55.557, -83.147, 0, 0, 0, 0, -38.2683, -92.388, 0, 0, 0, 0, -19.509, -98.0785, 0, 0, 0, 0, 0, -100)
+}
+point_count = 33
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r1b70"]
+radius = 20.0
+
+[node name="Mission4" type="Node"]
+script = ExtResource("1_q7lyq")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -152.0
+offset_right = 272.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="IceTextureFloor" type="TextureRect" parent="."]
+self_modulate = Color(0.972549, 1, 1, 0.784314)
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -1.0
+offset_right = 120.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_ha838")
+expand_mode = 2
+stretch_mode = 1
+flip_h = true
+flip_v = true
+metadata/_edit_use_anchors_ = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(85, 165)
+
+[node name="StartLoopPos" type="Marker2D" parent="."]
+position = Vector2(148, 255)
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="HUD_Mission" parent="." instance=ExtResource("3_2tjwq")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_ogl47")
+script = ExtResource("4_22m1y")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_uw5wq")
+
+[node name="DeathBox" type="Area2D" parent="."]
+position = Vector2(0, 720)
+collision_mask = 3
+script = ExtResource("6_u0p3i")
+
+[node name="WaterTexture" type="TextureRect" parent="DeathBox"]
+modulate = Color(1, 1, 1, 0.686275)
+texture_filter = 1
+offset_top = -128.0
+offset_right = 480.0
+texture = SubResource("AnimatedTexture_2lshl")
+expand_mode = 4
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathBox"]
+position = Vector2(240, -40)
+shape = SubResource("RectangleShape2D_xy06k")
+debug_color = Color(0.980369, 0, 0.380257, 0.42)
+
+[node name="Player" parent="." instance=ExtResource("9_nbnu4")]
+
+[node name="CirclePath2D" parent="." instance=ExtResource("11_cmu20")]
+position = Vector2(241, 388)
+scale = Vector2(1.6225, 1.6225)
+curve = SubResource("Curve2D_6jqhv")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="CirclePath2D"]
+position = Vector2(0, -100)
+rotation = 0.0981751
+rotates = false
+loop = false
+
+[node name="DummyPenguin" parent="CirclePath2D/PathFollow2D" instance=ExtResource("12_rkyya")]
+
+[node name="AnimatedSprite2D" parent="CirclePath2D/PathFollow2D/DummyPenguin" index="2"]
+animation = &"down"
+
+[node name="Line2D" type="Line2D" parent="CirclePath2D"]
+width = 5.0
+script = ExtResource("13_r0wvd")
+
+[node name="PlayerTrail" type="Line2D" parent="."]
+
+[node name="TrailTimer" type="Timer" parent="."]
+wait_time = 0.04
+
+[node name="LoopTrigger" type="Area2D" parent="."]
+position = Vector2(148, 255)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LoopTrigger"]
+shape = SubResource("CircleShape2D_r1b70")
+
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="finished" from="Music" to="Music" method="_on_finished"]
+[connection signal="body_entered" from="DeathBox" to="Player" method="_on_death_box_body_entered"]
+[connection signal="fell" from="Player" to="." method="_on_player_fell"]
+[connection signal="timeout" from="TrailTimer" to="." method="_on_trail_timer_timeout"]
+[connection signal="body_entered" from="LoopTrigger" to="." method="_on_loop_trigger_body_entered"]
+[connection signal="body_exited" from="LoopTrigger" to="." method="_on_loop_trigger_body_exited"]
+
+[editable path="CirclePath2D/PathFollow2D/DummyPenguin"]

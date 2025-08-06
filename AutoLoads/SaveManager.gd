@@ -1,42 +1,38 @@
 extends Node
 
-const Utils = preload("res://static/utils.gd")
+var highScore: int = 0
+var username: String = ""
+var missions_completed: Array[int] = []
 
-static var mission_count: int = 0
-
-static var highScore: int = 0
-static var username: String = ""
-static var missions_completed: Array[int] = []
-
-static func _static_init() -> void:
+func _ready() -> void:
 	save_load()
 
-static func saveHighScore(h: int) -> void:
+func saveHighScore(h: int) -> void:
 	highScore = h
 	save()
 	
-static func getHighScore() -> int:
+func getHighScore() -> int:
 	return highScore
 	
-static func saveName(n: String) -> void:
+func saveName(n: String) -> void:
 	username = n
 	save()
 	
-static func getUserName() -> String:
+func getUserName() -> String:
 	return username
 	
-static func setMissionComplete(id: int):
+func setMissionComplete(id: int):
 	if id not in missions_completed:
 		missions_completed.append(id)
 		save()
 
-static func getCompletedMissions() -> Array[int]:
+func getCompletedMissions() -> Array[int]:
 	return missions_completed
 	
-static func isMissionCompleted(id: int) -> bool:
+func isMissionCompleted(id: int) -> bool:
 	return id in missions_completed
 	
-static func save() -> void:
+func save() -> void:
 	var save_dict = {
 		"high_score" : highScore,
 		"name" : username,
@@ -47,7 +43,7 @@ static func save() -> void:
 	var json_string = JSON.stringify(save_dict)
 	save_file.store_line(json_string)
 
-static func save_load() -> void:
+func save_load() -> void:
 	if not FileAccess.file_exists("user://savegame.save"):
 		return # Error! We don't have a save to load.
 

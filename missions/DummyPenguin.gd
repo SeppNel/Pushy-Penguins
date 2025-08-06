@@ -3,6 +3,7 @@ extends RigidBody2D
 const water = preload("res://Water_Splash.tscn")
 
 signal fell
+signal touch(pos)
 
 const SPEED_LIMIT = 1000
 const MIN_SCREEN_CLAMP_OFFSET = Vector2(20, 30) # Left, Top
@@ -68,10 +69,12 @@ func _input(event):
 			# Start touch
 			initial_touch_position = event.position
 			is_touching = true
+			touch.emit(initial_touch_position)
 		else:
 			# End touch
 			is_touching = false
 			current_touch_position = null
+			touch.emit(Vector2.INF)
 	elif event is InputEventScreenDrag and is_touching:
 		# Update touch position
 		current_touch_position = event.position

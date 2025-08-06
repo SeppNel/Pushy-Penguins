@@ -17,7 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-SceneManager="*res://SceneManager.gd"
+SaveManager="*res://AutoLoads/SaveManager.gd"
+SceneManager="*res://AutoLoads/SceneManager.gd"
+Globals="*res://AutoLoads/Globals.gd"
 
 [display]
 

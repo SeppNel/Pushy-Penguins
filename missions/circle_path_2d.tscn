@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwra0y6rv27wm"]
+
+[ext_resource type="Script" path="res://missions/circlePath2D.gd" id="1_dgyaa"]
+
+[sub_resource type="Curve2D" id="Curve2D_ialb7"]
+
+[node name="CirclePath2D" type="Path2D"]
+curve = SubResource("Curve2D_ialb7")
+script = ExtResource("1_dgyaa")

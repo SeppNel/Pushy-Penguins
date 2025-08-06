@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d2e7okgajipy4"]
+[gd_scene load_steps=10 format=3 uid="uid://d2e7okgajipy4"]
 
 [ext_resource type="Script" path="res://Hud.gd" id="1_ch4na"]
 [ext_resource type="Script" path="res://FPS Counter.gd" id="2_bv3ww"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://c3h8q8qd8768q" path="res://art/icons/settings.png" id="4_bwt0u"]
 [ext_resource type="Texture2D" uid="uid://frvnss327a2s" path="res://art/icons/leaderboard_icon.png" id="5_n328g"]
 [ext_resource type="Texture2D" uid="uid://oh77tpae2q60" path="res://art/icons/close.png" id="7_ebpno"]
-[ext_resource type="Script" path="res://missions_container.gd" id="8_5jwn7"]
 
 [sub_resource type="InputEventAction" id="InputEventAction_qand2"]
 action = &"start_game"
@@ -326,6 +325,11 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="Missions/ScrollContainer"]
 layout_mode = 2
 
+[node name="HSeparator2" type="HSeparator" parent="Missions/ScrollContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
 [node name="Title" type="RichTextLabel" parent="Missions/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
@@ -342,16 +346,15 @@ layout_mode = 2
 
 [node name="MissionsContainer" type="VBoxContainer" parent="Missions/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-script = ExtResource("8_5jwn7")
 
 [node name="CloseMissionsButton" type="Button" parent="Missions"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -65.0
-offset_top = 20.0
+offset_top = 30.0
 offset_right = -15.0
-offset_bottom = 68.0
+offset_bottom = 78.0
 grow_horizontal = 0
 icon = ExtResource("7_ebpno")
 

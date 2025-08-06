@@ -1,14 +1,16 @@
 extends CanvasLayer
 
-const SaveManager = preload("res://static/SaveManager.gd")
 const Mission_Entry = preload("res://missions/List_Entry_Mission.tscn")
 const Utils = preload("res://static/utils.gd")
-
 const GreenCheckTexture = preload("res://art/icons/check_filled.png")
 
 const MissionNames = {
 	1: "Survive Lv. 1",
-	2: "Survive Lv. 2"
+	2: "Eat the Fish Lv. 1",
+	3: "Go for a Swim Lv. 1",
+	4: "Trace Walking Lv. 1",
+	5: "Avoid them Lv. 1",
+	6: "Hit them! Lv. 1"
 }
 
 # Notifies `Main` node that the button has been pressed
@@ -18,7 +20,7 @@ signal settings_changed(reset : bool)
 var playing : bool = false
 var hue : float = 0.00
 var adView = null
-var ads_shown : int = 0
+var should_restore_highscore: bool = false
 
 func _ready():
 	MobileAds.initialize()
@@ -92,12 +94,13 @@ func create_adView():
 	#unit_id = "ca-app-pub-3940256099942544/6300978111" # Test Ad
 
 	adView = AdView.new(unit_id, AdSize.BANNER, AdPosition.Values.BOTTOM)
-	adView.hide()
+	if Globals.ads_shown == 0:
+		adView.hide()
 	await get_tree().create_timer(1).timeout
 	adView.load_ad(AdRequest.new())
 	
 func show_ad():
-	ads_shown += 1
+	Globals.ads_shown += 1
 	#$ScoreLabel.position.y += adView.get_height()
 	adView.show()
 	adView.load_ad(AdRequest.new())
@@ -121,6 +124,14 @@ func toggle_non_overlay_visibility():
 	$StartButton.visible = !$StartButton.visible
 	$ScoreLabel.visible = !$ScoreLabel.visible
 	$MissionsButton.visible = !$MissionsButton.visible
+	
+	if should_restore_highscore:
+		$NewHighScore.show()
+		should_restore_highscore = false
+	else:
+		if $NewHighScore.visible:
+			$NewHighScore.hide()
+			should_restore_highscore = true
 
 func _on_settings_button_pressed():
 	toggle_non_overlay_visibility()
@@ -176,7 +187,7 @@ func hideAllButScore():
 	$LeaderboardButton.hide()
 	$MissionsButton.hide()
 	
-	if ads_shown > 0:
+	if Globals.ads_shown > 0:
 		hide_ad()
 
 func _on_missions_button_pressed() -> void:
@@ -199,7 +210,20 @@ func populateMissions():
 			instance.get_node("Label").text = "Mission " + str(i)
 		if SaveManager.isMissionCompleted(i):
 			instance.get_node("CheckTexture").texture = GreenCheckTexture
-		instance.get_node("Button").pressed.connect(
-			Callable(missions_c, "_on_mission_start_pressed").bind(i)
-		)
+		instance.get_node("Button").pressed.connect(Callable(_on_mission_start_pressed).bind(i))
 		missions_c.add_child(instance)
+
+func _on_mission_start_pressed(missionId: int) -> void:
+	destroy_ad()
+	Globals.ads_shown += 1
+	var path = "res://missions/mission_" + str(missionId) + ".tscn"
+	SceneManager.goto_scene(path)
+
+func _input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			# Start touch
+			show_origin_marker(event.position)
+		else:
+			# End touch
+			hide_origin_marker()

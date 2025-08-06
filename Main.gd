@@ -1,7 +1,6 @@
 extends Node
 
 const mob_scene = preload("res://Mob.tscn")
-const SaveManager = preload("res://static/SaveManager.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
@@ -63,20 +62,15 @@ func new_game():
 	get_tree().call_group("mobs", "queue_free")
 	$Music.play()
 
-
 func _on_mob_timer_timeout():
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
 	mob.init(DeathBox_ref)
 	
-	# Small penguin if true, big if false
-	if randi_range(1, 100) < 100 - (BIG_PENGUIN_CHANCE + 5 * difficultyFactor):
-		mob.get_node("AnimatedSprite2D").scale = Vector2(0.05, 0.05)
-		mob.get_node("CollisionShape2D").scale = Vector2(0.5, 0.5)
-	else:
+	# Big penguin if true, small if false
+	if randi_range(1, 100) >= 100 - (BIG_PENGUIN_CHANCE + 5 * difficultyFactor):
 		mob.isBigPenguin = true
-		mob.get_node("Shadow").scale = Vector2(0.6, 0.45)
-		mob.get_node("Shadow").modulate = Color(1, 1, 1, 0.35)
+	mob.updateScale()
 
 	# Set the mob's spawn position to a random location.
 	mob.position = Vector2(randf_range(0,480), -22)
@@ -88,7 +82,6 @@ func _on_mob_timer_timeout():
 
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
-
 
 func _on_score_timer_timeout():
 	score += 1

@@ -1,13 +1,7 @@
 extends CanvasLayer
 
-# Notifies `Main` node that the button has been pressed
-signal start_game
-
-var playing : bool = false
+var playing : bool = true
 var hue : float = 0.00
-
-func _ready():
-	pass
 
 func _process(delta):
 	if $CompleteLabel.visible: # Rainbow effect for NewHighscore
@@ -53,6 +47,7 @@ func showAll():
 	$OriginMarker.show()
 
 func showFailedMenu(lastMission: bool = false):
+	playing = false
 	$RetryButton.show()
 	$BackButton.show()
 	$Message.text = "Mission Failed"
@@ -65,6 +60,7 @@ func showFailedMenu(lastMission: bool = false):
 	$OriginMarker.hide()
 
 func showCompleteMenu(lastMission: bool = false):
+	playing = false
 	$RetryButton.show()
 	$BackButton.show()
 	$CompleteLabel.show()
@@ -73,3 +69,12 @@ func showCompleteMenu(lastMission: bool = false):
 	
 	$Message.hide()
 	$OriginMarker.hide()
+	
+func _input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			# Start touch
+			show_origin_marker(event.position)
+		else:
+			# End touch
+			hide_origin_marker()

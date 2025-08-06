@@ -5,11 +5,11 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 1
+const MISSION_ID = 5
 const BIG_PENGUIN_CHANCE = 20
 
 var last_mission: bool = false
-var timer: int = 15
+var timer: int = 20
 var playing: bool = true
 
 # Called when the node enters the scene tree for the first time.
@@ -20,9 +20,11 @@ func _ready() -> void:
 		last_mission = true
 	
 	$Player.start($StartPosition.position)
+	$Player.contact_monitor = true
+	$Player.max_contacts_reported = 100
 	$StartTimer.start()
 	$HUD_Mission.update_score(timer)
-	$HUD_Mission.show_message("Survive!")
+	$HUD_Mission.show_message("Avoid them!")
 	$Music.play()
 
 func _on_start_timer_timeout():
@@ -43,7 +45,7 @@ func _on_mob_timer_timeout():
 	mob.position = Vector2(randf_range(0,480), -22)
 
 	# Choose the velocity for the mob.
-	var velocity = Vector2(0.0, randf_range(350.0, 450.0))
+	var velocity = Vector2(0.0, randf_range(100.0, 150.0))
 	mob.linear_velocity = velocity
 
 	# Spawn the mob by adding it to the Main scene.
@@ -87,3 +89,10 @@ func returnToMainMenu():
 func nextMission():
 	var s = "res://missions/mission_" + str(MISSION_ID + 1) + ".tscn"
 	SceneManager.goto_scene(s)
+
+func _on_player_collision(mob: Node) -> void:
+	if playing:
+		playing = false
+		$DeathSound.play()
+		mob.modulate = Color(1, 0, 0, 0.80)
+		missionFinished(false)

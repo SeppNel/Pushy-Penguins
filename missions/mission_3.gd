@@ -5,12 +5,13 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 1
-const BIG_PENGUIN_CHANCE = 20
+const MISSION_ID = 3
+const SPAWN_DISTANCE_RATIO = 0.25
 
 var last_mission: bool = false
-var timer: int = 15
+var timer: int = 10
 var playing: bool = true
+var mobs: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -20,34 +21,18 @@ func _ready() -> void:
 		last_mission = true
 	
 	$Player.start($StartPosition.position)
+	$Player.is_dead = true
 	$StartTimer.start()
 	$HUD_Mission.update_score(timer)
-	$HUD_Mission.show_message("Survive!")
+	$HUD_Mission.show_message("Go for a Swim!")
 	$Music.play()
+	
+	initMobs()
 
 func _on_start_timer_timeout():
-	$MobTimer.start()
 	$ScoreTimer.start()
-
-func _on_mob_timer_timeout():
-	# Create a new instance of the Mob scene.
-	var mob = mob_scene.instantiate()
-	mob.init(DeathBox_ref)
-	
-	# Big penguin if true, small if false
-	if randi_range(1, 100) >= 100 - (BIG_PENGUIN_CHANCE):
-		mob.isBigPenguin = true
-	mob.updateScale()
-
-	# Set the mob's spawn position to a random location.
-	mob.position = Vector2(randf_range(0,480), -22)
-
-	# Choose the velocity for the mob.
-	var velocity = Vector2(0.0, randf_range(350.0, 450.0))
-	mob.linear_velocity = velocity
-
-	# Spawn the mob by adding it to the Main scene.
-	add_child(mob)
+	$Player.is_dead = false
+	startMobs()
 
 func _on_score_timer_timeout():
 	if playing:
@@ -56,20 +41,19 @@ func _on_score_timer_timeout():
 
 		if timer <= 0 :
 			playing = false
-			missionFinished(true)
+			$DeathSound.play()
+			missionFinished(false)
 
 func _on_player_fell() -> void:
 	if playing:
 		playing = false
-		$DeathSound.play()
 		await get_tree().create_timer(0.4).timeout
-		missionFinished(false)
+		missionFinished(true)
 
 func missionFinished(passed: bool):
 	SceneManager.preload_scene("res://Main.tscn")
 	$StartTimer.stop()
 	$ScoreTimer.stop()
-	$MobTimer.stop()
 	$HUD_Mission.hide_origin_marker()
 	$Music.stop()
 	
@@ -83,7 +67,19 @@ func missionFinished(passed: bool):
 
 func returnToMainMenu():
 	SceneManager.goto_scene("res://Main.tscn")
-	
+
 func nextMission():
 	var s = "res://missions/mission_" + str(MISSION_ID + 1) + ".tscn"
 	SceneManager.goto_scene(s)
+	
+func initMobs():
+	var screen_size = get_viewport().get_visible_rect().size
+	for child in get_children():
+		if child.is_in_group("mobs"):
+			child.init(DeathBox_ref, child.ANIMATION.WALK_UP)
+			child.position.y = screen_size.y * (1 - SPAWN_DISTANCE_RATIO)
+			mobs.append(child)
+			
+func startMobs():
+	for mob in mobs:
+		mob.linear_velocity = Vector2(0.0, -70)

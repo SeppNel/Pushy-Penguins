@@ -1,6 +1,5 @@
-[gd_scene load_steps=36 format=3 uid="uid://dtevh17wsaoom"]
+[gd_scene load_steps=35 format=3 uid="uid://br3kfb1p5grst"]
 
-[ext_resource type="Script" path="res://Player.gd" id="1_r2ta4"]
 [ext_resource type="Texture2D" uid="uid://jsjm54caqh58" path="res://art/player/player_walk_down_rf.png" id="2_bsq3a"]
 [ext_resource type="Texture2D" uid="uid://cgg0iegmbruu6" path="res://art/shadow.png" id="2_vdv7h"]
 [ext_resource type="Texture2D" uid="uid://sy330gfeap26" path="res://art/player/player_walk_down_mrf.png" id="3_00osd"]
@@ -216,12 +215,11 @@ animations = [{
 radius = 27.0
 height = 68.0
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="DummyPenguin" type="RigidBody2D"]
 collision_mask = 2
 mass = 0.1
 physics_material_override = SubResource("PhysicsMaterial_uc01x")
 gravity_scale = 0.0
-script = ExtResource("1_r2ta4")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.392157)
