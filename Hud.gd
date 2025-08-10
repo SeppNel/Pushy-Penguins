@@ -10,7 +10,13 @@ const MissionNames = {
 	3: "Go for a Swim Lv. 1",
 	4: "Trace Walking Lv. 1",
 	5: "Avoid them Lv. 1",
-	6: "Hit them! Lv. 1"
+	6: "Hit them! Lv. 1",
+	7: "Survive Lv. 2",
+	8: "Eat the Fish Lv. 2",
+	9: "Go for a Swim Lv. 2",
+	10: "Trace Walking Lv. 2",
+	11: "Avoid them Lv. 2",
+	12: "Hit them! Lv. 2",
 }
 
 # Notifies `Main` node that the button has been pressed
@@ -163,7 +169,7 @@ func _on_leaderboard_request_completed(result, response_code, headers, body):
 	var lb = JSON.parse_string(body.get_string_from_utf8())
 	var i = 1
 	for name in lb:
-		var score = lb[name]
+		var score: int = lb[name]
 
 		var label = Label.new()
 		label.text = str(i) + "º - " + str(name) + ": " + str(score)

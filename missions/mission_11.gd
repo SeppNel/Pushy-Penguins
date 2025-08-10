@@ -5,15 +5,12 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 6
-const BIG_PENGUIN_CHANCE = 20
-const MOBS_TARGET = 10
+const MISSION_ID = 11
+const BIG_PENGUIN_CHANCE = 25
 
-var mobs_spawned: int = 0
-var mobs_despawned: int = 0
 var last_mission: bool = false
+var timer: int = 30
 var playing: bool = true
-var mobs_touched: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,8 +23,8 @@ func _ready() -> void:
 	$Player.contact_monitor = true
 	$Player.max_contacts_reported = 100
 	$StartTimer.start()
-	$HUD_Mission.update_score(0)
-	$HUD_Mission.show_message("Hit all " + str(MOBS_TARGET) + " penguins!")
+	$HUD_Mission.update_score(timer)
+	$HUD_Mission.show_message("Avoid them!")
 	$Music.play()
 
 func _on_start_timer_timeout():
@@ -35,29 +32,33 @@ func _on_start_timer_timeout():
 	$ScoreTimer.start()
 
 func _on_mob_timer_timeout():
-	if mobs_spawned < MOBS_TARGET:
-		var mob = mob_scene.instantiate()
-		mob.init(DeathBox_ref)
-		mob.id = mobs_spawned
-		mob.connect("despawned", _on_mob_despawned)
-		
-		# Big penguin if true, small if false
-		if randi_range(1, 100) >= 100 - (BIG_PENGUIN_CHANCE):
-			mob.isBigPenguin = true
-		mob.updateScale()
-
-		# Set the mob's spawn position to a random location.
-		mob.position = Vector2(randf_range(0,480), -22)
-
-		# Choose the velocity for the mob.
-		var velocity = Vector2(0.0, randf_range(150.0, 200.0))
-		mob.linear_velocity = velocity
-
-		# Spawn the mob by adding it to the Main scene.
-		add_child(mob)
+	# Create a new instance of the Mob scene.
+	var mob = mob_scene.instantiate()
+	mob.init(DeathBox_ref)
 	
-		mobs_spawned += 1
+	# Big penguin if true, small if false
+	if randi_range(1, 100) >= 100 - (BIG_PENGUIN_CHANCE):
+		mob.isBigPenguin = true
+	mob.updateScale()
 
+	# Set the mob's spawn position to a random location.
+	mob.position = Vector2(randf_range(0,480), -22)
+
+	# Choose the velocity for the mob.
+	var velocity = Vector2(0.0, randf_range(160.0, 210.0))
+	mob.linear_velocity = velocity
+
+	# Spawn the mob by adding it to the Main scene.
+	add_child(mob)
+
+func _on_score_timer_timeout():
+	if playing:
+		timer -= 1
+		$HUD_Mission.update_score(timer)
+
+		if timer <= 0 :
+			playing = false
+			missionFinished(true)
 
 func _on_player_fell() -> void:
 	if playing:
@@ -91,19 +92,7 @@ func nextMission():
 
 func _on_player_collision(mob: Node) -> void:
 	if playing:
-		mobs_touched[mob.id] = true
-		mob.modulate = Color(0, 1, 0, 0.80)
-		$HUD_Mission.update_score(mobs_touched.size())
-		
-func _on_mob_despawned(mob_id: int) -> void:
-	if playing:
-		mobs_despawned += 1
-		if mobs_despawned == MOBS_TARGET:
-			missionFinished(mobs_touched.size() == MOBS_TARGET)
-
-func animateScore(score):
-	for i in range(100):
-		var rand = randi_range(1, 100)
-		$HUD_Mission.update_score(rand)
-		await get_tree().create_timer(0.01).timeout
-	$HUD_Mission.update_score(score)
+		playing = false
+		$DeathSound.play()
+		mob.modulate = Color(1, 0, 0, 0.80)
+		missionFinished(false)

@@ -5,14 +5,12 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 2
-const BIG_PENGUIN_CHANCE = 20
-const FISH_TARGET = 4
+const MISSION_ID = 7
+const BIG_PENGUIN_CHANCE = 25
 
 var last_mission: bool = false
-var timer: int = 10
+var timer: int = 20
 var playing: bool = true
-var fish_eaten: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,18 +20,14 @@ func _ready() -> void:
 		last_mission = true
 	
 	$Player.start($StartPosition.position)
-	$Player.is_dead = true
 	$StartTimer.start()
 	$HUD_Mission.update_score(timer)
-	$HUD_Mission.show_message("Eat the fish!")
+	$HUD_Mission.show_message("Survive!")
 	$Music.play()
-	
-	adjustFishToScreen()
 
 func _on_start_timer_timeout():
 	$MobTimer.start()
 	$ScoreTimer.start()
-	$Player.is_dead = false
 
 func _on_mob_timer_timeout():
 	# Create a new instance of the Mob scene.
@@ -49,7 +43,7 @@ func _on_mob_timer_timeout():
 	mob.position = Vector2(randf_range(0,480), -22)
 
 	# Choose the velocity for the mob.
-	var velocity = Vector2(0.0, randf_range(250.0, 350.0))
+	var velocity = Vector2(0.0, randf_range(350.0, 450.0))
 	mob.linear_velocity = velocity
 
 	# Spawn the mob by adding it to the Main scene.
@@ -62,14 +56,13 @@ func _on_score_timer_timeout():
 
 		if timer <= 0 :
 			playing = false
-			$DeathSound.play()
-			missionFinished(false)
+			missionFinished(true)
 
 func _on_player_fell() -> void:
 	if playing:
 		playing = false
-		await get_tree().create_timer(0.4).timeout
 		$DeathSound.play()
+		await get_tree().create_timer(0.4).timeout
 		missionFinished(false)
 
 func missionFinished(passed: bool):
@@ -90,28 +83,7 @@ func missionFinished(passed: bool):
 
 func returnToMainMenu():
 	SceneManager.goto_scene("res://Main.tscn")
-
+	
 func nextMission():
 	var s = "res://missions/mission_" + str(MISSION_ID + 1) + ".tscn"
 	SceneManager.goto_scene(s)
-
-
-func _on_fish_body_entered(body: Node2D, fishId: int) -> void:
-	if playing:
-		var node = "Fish" + str(fishId)
-		get_node(node).queue_free()
-		
-		fish_eaten += 1
-		#$Player.scale += Vector2(0.5, 0.5)
-		$Player.scale(1.1)
-		$Player.mass += 0.05
-		if fish_eaten >= FISH_TARGET:
-			playing = false
-			missionFinished(true)
-
-func adjustFishToScreen():
-	await get_tree().process_frame
-	for i in range(1, FISH_TARGET):
-		var fish = get_node("Fish" + str(i))
-		var old_distance_ratio = fish.position.y / 720
-		fish.position.y = get_viewport().get_visible_rect().size.y * old_distance_ratio

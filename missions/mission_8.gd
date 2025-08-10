@@ -5,9 +5,9 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 2
+const MISSION_ID = 8
 const BIG_PENGUIN_CHANCE = 20
-const FISH_TARGET = 4
+const FISH_TARGET = 5
 
 var last_mission: bool = false
 var timer: int = 10

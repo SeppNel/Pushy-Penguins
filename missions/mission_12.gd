@@ -5,9 +5,9 @@ const Utils = preload("res://static/utils.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 6
+const MISSION_ID = 12
 const BIG_PENGUIN_CHANCE = 20
-const MOBS_TARGET = 10
+const MOBS_TARGET = 15
 
 var mobs_spawned: int = 0
 var mobs_despawned: int = 0
