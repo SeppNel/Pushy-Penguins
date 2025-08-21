@@ -69,7 +69,14 @@ func showCompleteMenu(lastMission: bool = false):
 	
 	$Message.hide()
 	$OriginMarker.hide()
-	
+
+func animateScore(score: int):
+	for i in range(100):
+		var rand = randi_range(1, 100)
+		update_score(rand)
+		await get_tree().create_timer(0.01).timeout
+	update_score(score)
+
 func _input(event):
 	if event is InputEventScreenTouch:
 		if event.pressed:

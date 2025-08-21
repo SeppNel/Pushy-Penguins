@@ -1,0 +1,621 @@
+[gd_scene load_steps=15 format=3 uid="uid://bksq0c40tqtxy"]
+
+[ext_resource type="Script" uid="uid://mng6bmb842ul" path="res://missions/mission_15.gd" id="1_56ywh"]
+[ext_resource type="Texture2D" uid="uid://c3rbq7njvoaf0" path="res://art/ice_floor3.png" id="2_6khpb"]
+[ext_resource type="PackedScene" uid="uid://cnewpfj0saicm" path="res://missions/Hud_Mission.tscn" id="3_lgko7"]
+[ext_resource type="AudioStream" uid="uid://532t1b3ql5ff" path="res://sound/bgm.mp3" id="4_kdh2q"]
+[ext_resource type="Script" uid="uid://be8h6oqce2lfd" path="res://Music.gd" id="5_8lh32"]
+[ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="6_otogg"]
+[ext_resource type="AudioStream" uid="uid://cwym12wnl3yb5" path="res://sound/win.mp3" id="7_00yid"]
+[ext_resource type="Script" uid="uid://fh8j43g4cbk6" path="res://DeathBox.gd" id="7_dak0r"]
+[ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="8_limuk"]
+[ext_resource type="Texture2D" uid="uid://dxhgr6yrn6k0m" path="res://art/water2.png" id="9_oja56"]
+[ext_resource type="PackedScene" uid="uid://b5a1x7htlysw6" path="res://Mob.tscn" id="10_um0qv"]
+[ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="11_acrwm"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_2lshl"]
+frames = 2
+speed_scale = 2.0
+frame_0/texture = ExtResource("8_limuk")
+frame_1/texture = ExtResource("9_oja56")
+frame_1/duration = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xy06k"]
+size = Vector2(480, 80)
+
+[node name="Mission15" type="Node"]
+script = ExtResource("1_56ywh")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -152.0
+offset_right = 272.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="IceTextureFloor" type="TextureRect" parent="."]
+self_modulate = Color(0.972549, 1, 1, 0.784314)
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -1.0
+offset_right = 120.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_6khpb")
+expand_mode = 2
+stretch_mode = 1
+flip_h = true
+flip_v = true
+metadata/_edit_use_anchors_ = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 139)
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="HUD_Mission" parent="." instance=ExtResource("3_lgko7")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_kdh2q")
+script = ExtResource("5_8lh32")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_otogg")
+
+[node name="WinSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_00yid")
+volume_db = 4.0
+
+[node name="DeathBox" type="Area2D" parent="."]
+position = Vector2(0, 720)
+collision_mask = 3
+script = ExtResource("7_dak0r")
+
+[node name="WaterTexture" type="TextureRect" parent="DeathBox"]
+modulate = Color(1, 1, 1, 0.686275)
+texture_filter = 1
+offset_top = -128.0
+offset_right = 480.0
+texture = SubResource("AnimatedTexture_2lshl")
+expand_mode = 4
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathBox"]
+position = Vector2(240, -40)
+shape = SubResource("RectangleShape2D_xy06k")
+debug_color = Color(0.980369, 0, 0.380257, 0.42)
+
+[node name="Mob1" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(24, 432)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob1" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob1" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob1" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob2" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(80, 456)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob2" index="2"]
+animation = &"up"
+
+[node name="Mob4" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(160, 456)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob4" index="2"]
+animation = &"up"
+
+[node name="Mob6" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(240, 456)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob6" index="2"]
+animation = &"up"
+
+[node name="Mob8" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(320, 456)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob8" index="2"]
+animation = &"up"
+
+[node name="Mob10" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(400, 456)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob10" index="2"]
+animation = &"up"
+
+[node name="Mob15" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(456, 432)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob15" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob15" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob15" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob11" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(24, 536)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob11" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob11" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob11" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob13" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(120, 512)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob13" index="2"]
+animation = &"up"
+
+[node name="Mob16" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(200, 512)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob16" index="2"]
+animation = &"up"
+
+[node name="Mob18" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(280, 512)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob18" index="2"]
+animation = &"up"
+
+[node name="Mob20" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(360, 512)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob20" index="2"]
+animation = &"up"
+
+[node name="Mob22" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(456, 536)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob22" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob22" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob22" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob3" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(80, 552)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob3" index="2"]
+animation = &"up"
+
+[node name="Mob5" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(160, 552)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob5" index="2"]
+animation = &"up"
+
+[node name="Mob7" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(240, 552)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob7" index="2"]
+animation = &"up"
+
+[node name="Mob9" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(320, 552)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob9" index="2"]
+animation = &"up"
+
+[node name="Mob12" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(400, 552)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob12" index="2"]
+animation = &"up"
+
+[node name="Mob14" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(112, 408)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob14" index="2"]
+animation = &"up"
+
+[node name="Mob17" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(192, 408)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob17" index="2"]
+animation = &"up"
+
+[node name="Mob19" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(272, 408)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob19" index="2"]
+animation = &"up"
+
+[node name="Mob21" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(352, 408)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob21" index="2"]
+animation = &"up"
+
+[node name="Mob23" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(24, 232)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob23" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob23" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob23" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob24" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(80, 256)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob24" index="2"]
+animation = &"up"
+
+[node name="Mob25" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(160, 256)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob25" index="2"]
+animation = &"up"
+
+[node name="Mob26" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(240, 256)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob26" index="2"]
+animation = &"up"
+
+[node name="Mob27" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(320, 256)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob27" index="2"]
+animation = &"up"
+
+[node name="Mob28" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(400, 256)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob28" index="2"]
+animation = &"up"
+
+[node name="Mob29" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(456, 232)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob29" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob29" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob29" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob30" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(24, 336)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob30" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob30" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob30" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob31" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(120, 312)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob31" index="2"]
+animation = &"up"
+
+[node name="Mob32" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(200, 312)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob32" index="2"]
+animation = &"up"
+
+[node name="Mob33" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(280, 312)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob33" index="2"]
+animation = &"up"
+
+[node name="Mob34" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(360, 312)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob34" index="2"]
+animation = &"up"
+
+[node name="Mob35" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(456, 336)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+isBigPenguin = true
+
+[node name="Shadow" parent="Mob35" index="1"]
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(0.6, 0.45)
+
+[node name="AnimatedSprite2D" parent="Mob35" index="2"]
+scale = Vector2(0.1, 0.1)
+animation = &"up"
+
+[node name="CollisionShape2D" parent="Mob35" index="3"]
+scale = Vector2(1, 1)
+
+[node name="Mob36" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(80, 352)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob36" index="2"]
+animation = &"up"
+
+[node name="Mob37" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(160, 352)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob37" index="2"]
+animation = &"up"
+
+[node name="Mob38" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(240, 352)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob38" index="2"]
+animation = &"up"
+
+[node name="Mob39" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(320, 352)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob39" index="2"]
+animation = &"up"
+
+[node name="Mob40" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(400, 352)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob40" index="2"]
+animation = &"up"
+
+[node name="Mob41" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(112, 208)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob41" index="2"]
+animation = &"up"
+
+[node name="Mob42" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(192, 208)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob42" index="2"]
+animation = &"up"
+
+[node name="Mob43" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(272, 208)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob43" index="2"]
+animation = &"up"
+
+[node name="Mob44" parent="." instance=ExtResource("10_um0qv")]
+position = Vector2(352, 208)
+collision_mask = 3
+mass = 2.0
+linear_damp_mode = 1
+
+[node name="AnimatedSprite2D" parent="Mob44" index="2"]
+animation = &"up"
+
+[node name="Player" parent="." instance=ExtResource("11_acrwm")]
+
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="finished" from="Music" to="Music" method="_on_finished"]
+[connection signal="body_entered" from="DeathBox" to="Player" method="_on_death_box_body_entered"]
+[connection signal="fell" from="Player" to="." method="_on_player_fell"]
+
+[editable path="Mob1"]
+[editable path="Mob2"]
+[editable path="Mob4"]
+[editable path="Mob6"]
+[editable path="Mob8"]
+[editable path="Mob10"]
+[editable path="Mob15"]
+[editable path="Mob11"]
+[editable path="Mob13"]
+[editable path="Mob16"]
+[editable path="Mob18"]
+[editable path="Mob20"]
+[editable path="Mob22"]
+[editable path="Mob3"]
+[editable path="Mob5"]
+[editable path="Mob7"]
+[editable path="Mob9"]
+[editable path="Mob12"]
+[editable path="Mob14"]
+[editable path="Mob17"]
+[editable path="Mob19"]
+[editable path="Mob21"]
+[editable path="Mob23"]
+[editable path="Mob24"]
+[editable path="Mob25"]
+[editable path="Mob26"]
+[editable path="Mob27"]
+[editable path="Mob28"]
+[editable path="Mob29"]
+[editable path="Mob30"]
+[editable path="Mob31"]
+[editable path="Mob32"]
+[editable path="Mob33"]
+[editable path="Mob34"]
+[editable path="Mob35"]
+[editable path="Mob36"]
+[editable path="Mob37"]
+[editable path="Mob38"]
+[editable path="Mob39"]
+[editable path="Mob40"]
+[editable path="Mob41"]
+[editable path="Mob42"]
+[editable path="Mob43"]
+[editable path="Mob44"]

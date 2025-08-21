@@ -2,12 +2,13 @@ extends Node
 
 const mob_scene = preload("res://Mob.tscn")
 const Utils = preload("res://static/utils.gd")
+const MissionData = preload("res://missions/mission_data.gd")
 
 @onready var DeathBox_ref = $DeathBox
 @onready var pathFollow_ref: PathFollow2D = $Path2D/PathFollow2D
 @onready var dummyPenSprite_ref: AnimatedSprite2D = $Path2D/PathFollow2D/DummyPenguin/AnimatedSprite2D
 
-const MISSION_ID = 10
+const MISSION_ID = MissionData.Id.WALK_2
 const MAX_DISTANCE = 14.0
 
 var last_mission: bool = false
@@ -72,7 +73,7 @@ func missionFinished(passed: bool):
 	$Music.stop()
 	
 	if passed:
-		# TODO: Play Happy Music
+		$WinSound.play()
 		SaveManager.setMissionComplete(MISSION_ID)
 		$HUD_Mission.showCompleteMenu(last_mission)
 	else:
@@ -99,7 +100,7 @@ func _on_loop_trigger_body_entered(body: Node2D) -> void:
 		$ScoreTimer.stop()
 		var score: float = compareLines()
 		score = round(score * 100)
-		animateScore(int(score))
+		$HUD_Mission.animateScore(int(score))
 		
 		await get_tree().create_timer(2.5).timeout
 		if score < 50:
@@ -128,13 +129,6 @@ func compareLines() -> float:
 		return 0.0
 
 	return total_score / count  # normalized 0.0 to 1.0
-	
-func animateScore(score):
-	for i in range(100):
-		var rand = randi_range(1, 100)
-		$HUD_Mission.update_score(rand)
-		await get_tree().create_timer(0.01).timeout
-	$HUD_Mission.update_score(score)
 	
 func sprite_rotation(progress_ratio: float):
 	if progress_ratio < 0.3:

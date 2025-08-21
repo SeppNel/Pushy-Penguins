@@ -1,5 +1,3 @@
-extends Node
-	
 static func get_mission_count() -> int:
 	var i: int = 1
 	var path: String

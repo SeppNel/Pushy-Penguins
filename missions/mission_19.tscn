@@ -1,0 +1,625 @@
+[gd_scene load_steps=16 format=3 uid="uid://cbblwv7felb43"]
+
+[ext_resource type="Script" uid="uid://cenxln0sg8t0d" path="res://missions/mission_19.gd" id="1_rokxw"]
+[ext_resource type="Texture2D" uid="uid://c3rbq7njvoaf0" path="res://art/ice_floor3.png" id="2_s6jva"]
+[ext_resource type="PackedScene" uid="uid://cnewpfj0saicm" path="res://missions/Hud_Mission.tscn" id="3_8hptj"]
+[ext_resource type="AudioStream" uid="uid://532t1b3ql5ff" path="res://sound/bgm.mp3" id="4_wh1pe"]
+[ext_resource type="Script" uid="uid://be8h6oqce2lfd" path="res://Music.gd" id="5_j5nd8"]
+[ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="6_cwf70"]
+[ext_resource type="Script" uid="uid://fh8j43g4cbk6" path="res://DeathBox.gd" id="7_18ayd"]
+[ext_resource type="AudioStream" uid="uid://cwym12wnl3yb5" path="res://sound/win.mp3" id="7_s6jva"]
+[ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="8_e6lru"]
+[ext_resource type="Texture2D" uid="uid://dxhgr6yrn6k0m" path="res://art/water2.png" id="9_ybvrl"]
+[ext_resource type="Texture2D" uid="uid://drbrjkugh322n" path="res://art/props/fish/Salmon.png" id="10_qbmmu"]
+[ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="11_kta8g"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_2lshl"]
+frames = 2
+speed_scale = 2.0
+frame_0/texture = ExtResource("8_e6lru")
+frame_1/texture = ExtResource("9_ybvrl")
+frame_1/duration = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xy06k"]
+size = Vector2(480, 80)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7v0be"]
+radius = 7.45199
+
+[node name="Mission19" type="Node"]
+script = ExtResource("1_rokxw")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -152.0
+offset_right = 272.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="IceTextureFloor" type="TextureRect" parent="."]
+self_modulate = Color(0.972549, 1, 1, 0.784314)
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -1.0
+offset_right = 120.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_s6jva")
+expand_mode = 2
+stretch_mode = 1
+flip_h = true
+flip_v = true
+metadata/_edit_use_anchors_ = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 450)
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="HUD_Mission" parent="." instance=ExtResource("3_8hptj")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_wh1pe")
+script = ExtResource("5_j5nd8")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_cwf70")
+
+[node name="WinSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_s6jva")
+volume_db = 4.0
+
+[node name="DeathBox" type="Area2D" parent="."]
+position = Vector2(0, 720)
+collision_mask = 3
+script = ExtResource("7_18ayd")
+
+[node name="WaterTexture" type="TextureRect" parent="DeathBox"]
+modulate = Color(1, 1, 1, 0.686275)
+texture_filter = 1
+offset_top = -128.0
+offset_right = 480.0
+texture = SubResource("AnimatedTexture_2lshl")
+expand_mode = 4
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathBox"]
+position = Vector2(240, -40)
+shape = SubResource("RectangleShape2D_xy06k")
+debug_color = Color(0.980369, 0, 0.380257, 0.42)
+
+[node name="Fish1" type="Area2D" parent="."]
+position = Vector2(43, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish1"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish1"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish2" type="Area2D" parent="."]
+position = Vector2(128, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish2"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish2"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish3" type="Area2D" parent="."]
+position = Vector2(208, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish3"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish3"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish4" type="Area2D" parent="."]
+position = Vector2(288, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish4"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish4"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish5" type="Area2D" parent="."]
+position = Vector2(360, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish5"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish5"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish6" type="Area2D" parent="."]
+position = Vector2(432, 160)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish6"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish6"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish7" type="Area2D" parent="."]
+position = Vector2(43, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish7"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish7"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish8" type="Area2D" parent="."]
+position = Vector2(128, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish8"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish8"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish9" type="Area2D" parent="."]
+position = Vector2(208, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish9"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish9"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish10" type="Area2D" parent="."]
+position = Vector2(288, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish10"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish10"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish11" type="Area2D" parent="."]
+position = Vector2(360, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish11"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish11"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish12" type="Area2D" parent="."]
+position = Vector2(432, 256)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish12"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish12"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish13" type="Area2D" parent="."]
+position = Vector2(43, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish13"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish13"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish14" type="Area2D" parent="."]
+position = Vector2(128, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish14"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish14"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish15" type="Area2D" parent="."]
+position = Vector2(208, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish15"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish15"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish16" type="Area2D" parent="."]
+position = Vector2(288, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish16"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish16"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish17" type="Area2D" parent="."]
+position = Vector2(360, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish17"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish17"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish18" type="Area2D" parent="."]
+position = Vector2(432, 359)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish18"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish18"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish19" type="Area2D" parent="."]
+position = Vector2(43, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish19"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish19"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish20" type="Area2D" parent="."]
+position = Vector2(128, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish20"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish20"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish21" type="Area2D" parent="."]
+position = Vector2(208, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish21"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish21"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish22" type="Area2D" parent="."]
+position = Vector2(288, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish22"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish22"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish23" type="Area2D" parent="."]
+position = Vector2(360, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish23"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish23"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish24" type="Area2D" parent="."]
+position = Vector2(432, 450)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish24"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish24"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish25" type="Area2D" parent="."]
+position = Vector2(43, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish25"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish25"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish26" type="Area2D" parent="."]
+position = Vector2(128, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish26"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish26"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish27" type="Area2D" parent="."]
+position = Vector2(208, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish27"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish27"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish28" type="Area2D" parent="."]
+position = Vector2(288, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish28"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish28"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish29" type="Area2D" parent="."]
+position = Vector2(360, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish29"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish29"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Fish30" type="Area2D" parent="."]
+position = Vector2(432, 544)
+rotation = -0.977384
+
+[node name="Sprite2D" type="Sprite2D" parent="Fish30"]
+rotation = -1.25664
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_qbmmu")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish30"]
+position = Vector2(2, -1)
+rotation = 0.916298
+scale = Vector2(2.3, 2.3)
+shape = SubResource("CapsuleShape2D_7v0be")
+
+[node name="Player" parent="." instance=ExtResource("11_kta8g")]
+
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="finished" from="Music" to="Music" method="_on_finished"]
+[connection signal="body_entered" from="DeathBox" to="Player" method="_on_death_box_body_entered"]
+[connection signal="body_entered" from="Fish1" to="." method="_on_fish_body_entered" binds= [1]]
+[connection signal="body_entered" from="Fish2" to="." method="_on_fish_body_entered" binds= [2]]
+[connection signal="body_entered" from="Fish3" to="." method="_on_fish_body_entered" binds= [3]]
+[connection signal="body_entered" from="Fish4" to="." method="_on_fish_body_entered" binds= [4]]
+[connection signal="body_entered" from="Fish5" to="." method="_on_fish_body_entered" binds= [5]]
+[connection signal="body_entered" from="Fish6" to="." method="_on_fish_body_entered" binds= [6]]
+[connection signal="body_entered" from="Fish7" to="." method="_on_fish_body_entered" binds= [7]]
+[connection signal="body_entered" from="Fish8" to="." method="_on_fish_body_entered" binds= [8]]
+[connection signal="body_entered" from="Fish9" to="." method="_on_fish_body_entered" binds= [9]]
+[connection signal="body_entered" from="Fish10" to="." method="_on_fish_body_entered" binds= [10]]
+[connection signal="body_entered" from="Fish11" to="." method="_on_fish_body_entered" binds= [11]]
+[connection signal="body_entered" from="Fish12" to="." method="_on_fish_body_entered" binds= [12]]
+[connection signal="body_entered" from="Fish13" to="." method="_on_fish_body_entered" binds= [13]]
+[connection signal="body_entered" from="Fish14" to="." method="_on_fish_body_entered" binds= [14]]
+[connection signal="body_entered" from="Fish15" to="." method="_on_fish_body_entered" binds= [15]]
+[connection signal="body_entered" from="Fish16" to="." method="_on_fish_body_entered" binds= [16]]
+[connection signal="body_entered" from="Fish17" to="." method="_on_fish_body_entered" binds= [17]]
+[connection signal="body_entered" from="Fish18" to="." method="_on_fish_body_entered" binds= [18]]
+[connection signal="body_entered" from="Fish19" to="." method="_on_fish_body_entered" binds= [19]]
+[connection signal="body_entered" from="Fish20" to="." method="_on_fish_body_entered" binds= [20]]
+[connection signal="body_entered" from="Fish21" to="." method="_on_fish_body_entered" binds= [21]]
+[connection signal="body_entered" from="Fish22" to="." method="_on_fish_body_entered" binds= [22]]
+[connection signal="body_entered" from="Fish23" to="." method="_on_fish_body_entered" binds= [23]]
+[connection signal="body_entered" from="Fish24" to="." method="_on_fish_body_entered" binds= [24]]
+[connection signal="body_entered" from="Fish25" to="." method="_on_fish_body_entered" binds= [25]]
+[connection signal="body_entered" from="Fish26" to="." method="_on_fish_body_entered" binds= [26]]
+[connection signal="body_entered" from="Fish27" to="." method="_on_fish_body_entered" binds= [27]]
+[connection signal="body_entered" from="Fish28" to="." method="_on_fish_body_entered" binds= [28]]
+[connection signal="body_entered" from="Fish29" to="." method="_on_fish_body_entered" binds= [29]]
+[connection signal="body_entered" from="Fish30" to="." method="_on_fish_body_entered" binds= [30]]
+[connection signal="fell" from="Player" to="." method="_on_player_fell"]

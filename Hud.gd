@@ -3,21 +3,7 @@ extends CanvasLayer
 const Mission_Entry = preload("res://missions/List_Entry_Mission.tscn")
 const Utils = preload("res://static/utils.gd")
 const GreenCheckTexture = preload("res://art/icons/check_filled.png")
-
-const MissionNames = {
-	1: "Survive Lv. 1",
-	2: "Eat the Fish Lv. 1",
-	3: "Go for a Swim Lv. 1",
-	4: "Trace Walking Lv. 1",
-	5: "Avoid them Lv. 1",
-	6: "Hit them! Lv. 1",
-	7: "Survive Lv. 2",
-	8: "Eat the Fish Lv. 2",
-	9: "Go for a Swim Lv. 2",
-	10: "Trace Walking Lv. 2",
-	11: "Avoid them Lv. 2",
-	12: "Hit them! Lv. 2",
-}
+const MissionData = preload("res://missions/mission_data.gd")
 
 # Notifies `Main` node that the button has been pressed
 signal start_game
@@ -210,8 +196,8 @@ func populateMissions():
 	
 	for i: int in range(1, missionCount + 1):
 		var instance = Mission_Entry.instantiate()
-		if i in MissionNames:
-			instance.get_node("Label").text = MissionNames[i]
+		if i in MissionData.Names:
+			instance.get_node("Label").text = MissionData.Names[i]
 		else:
 			instance.get_node("Label").text = "Mission " + str(i)
 		if SaveManager.isMissionCompleted(i):

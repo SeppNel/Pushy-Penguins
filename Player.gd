@@ -22,6 +22,7 @@ var current_touch_position
 var is_touching := false
 var is_dead := false
 var start_position
+var force_multiplier: int = 60
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -97,7 +98,7 @@ func apply_joystick_force(delta, direction):
 	var normalized_direction = direction.normalized()
 	var force_magnitude = direction.length()
 	
-	var force = normalized_direction * force_magnitude * delta * 60 # Adjust the multiplier as needed
+	var force = normalized_direction * force_magnitude * delta * force_multiplier # Adjust the multiplier as needed
 	# Apply force to the character
 	apply_force(force)
 

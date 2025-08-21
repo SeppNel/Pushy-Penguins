@@ -2,10 +2,11 @@ extends Node
 
 const mob_scene = preload("res://Mob.tscn")
 const Utils = preload("res://static/utils.gd")
+const MissionData = preload("res://missions/mission_data.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 9
+const MISSION_ID = MissionData.Id.SWIM_2
 
 var last_mission: bool = false
 var timer: int = 10
@@ -57,7 +58,7 @@ func missionFinished(passed: bool):
 	$Music.stop()
 	
 	if passed:
-		# TODO: Play Happy Music
+		$WinSound.play()
 		SaveManager.setMissionComplete(MISSION_ID)
 		$HUD_Mission.showCompleteMenu(last_mission)
 	else:

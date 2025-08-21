@@ -2,10 +2,11 @@ extends Node
 
 const mob_scene = preload("res://Mob.tscn")
 const Utils = preload("res://static/utils.gd")
+const MissionData = preload("res://missions/mission_data.gd")
 
 @onready var DeathBox_ref = $DeathBox
 
-const MISSION_ID = 6
+const MISSION_ID = MissionData.Id.BULLY_1
 const BIG_PENGUIN_CHANCE = 20
 const MOBS_TARGET = 10
 
@@ -75,7 +76,7 @@ func missionFinished(passed: bool):
 	$Music.stop()
 	
 	if passed:
-		# TODO: Play Happy Music
+		$WinSound.play()
 		SaveManager.setMissionComplete(MISSION_ID)
 		$HUD_Mission.showCompleteMenu(last_mission)
 	else:
@@ -100,10 +101,3 @@ func _on_mob_despawned(mob_id: int) -> void:
 		mobs_despawned += 1
 		if mobs_despawned == MOBS_TARGET:
 			missionFinished(mobs_touched.size() == MOBS_TARGET)
-
-func animateScore(score):
-	for i in range(100):
-		var rand = randi_range(1, 100)
-		$HUD_Mission.update_score(rand)
-		await get_tree().create_timer(0.01).timeout
-	$HUD_Mission.update_score(score)

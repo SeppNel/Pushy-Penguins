@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dfrhw3yty2b4m"]
+[gd_scene load_steps=16 format=3 uid="uid://dfrhw3yty2b4m"]
 
 [ext_resource type="Script" uid="uid://rohysrr64evd" path="res://missions/mission_2.gd" id="1_074xk"]
 [ext_resource type="Texture2D" uid="uid://c3rbq7njvoaf0" path="res://art/ice_floor3.png" id="1_ha838"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://rsh6crkjjxk4" path="res://art/gameover.wav" id="5_uw5wq"]
 [ext_resource type="Script" uid="uid://fh8j43g4cbk6" path="res://DeathBox.gd" id="6_u0p3i"]
 [ext_resource type="Texture2D" uid="uid://c3avc7vwurlau" path="res://art/water.png" id="7_njwnj"]
+[ext_resource type="AudioStream" uid="uid://cwym12wnl3yb5" path="res://sound/win.mp3" id="7_xcojt"]
 [ext_resource type="Texture2D" uid="uid://dxhgr6yrn6k0m" path="res://art/water2.png" id="8_xvj8t"]
 [ext_resource type="PackedScene" uid="uid://dtevh17wsaoom" path="res://Player.tscn" id="9_nbnu4"]
 [ext_resource type="Texture2D" uid="uid://drbrjkugh322n" path="res://art/props/fish/Salmon.png" id="11_1xsw4"]
@@ -80,6 +81,10 @@ script = ExtResource("4_22m1y")
 
 [node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_uw5wq")
+
+[node name="WinSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_xcojt")
+volume_db = 4.0
 
 [node name="DeathBox" type="Area2D" parent="."]
 position = Vector2(0, 720)
