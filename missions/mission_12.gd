@@ -63,9 +63,7 @@ func _on_mob_timer_timeout():
 func _on_player_fell() -> void:
 	if playing:
 		playing = false
-		$DeathSound.play()
-		await get_tree().create_timer(0.4).timeout
-		missionFinished(false)
+		missionFinished(mobs_touched.size() == MOBS_TARGET)
 
 func missionFinished(passed: bool):
 	SceneManager.preload_scene("res://Main.tscn")
@@ -80,6 +78,7 @@ func missionFinished(passed: bool):
 		SaveManager.setMissionComplete(MISSION_ID)
 		$HUD_Mission.showCompleteMenu(last_mission)
 	else:
+		$DeathSound.play()
 		$HUD_Mission.showFailedMenu(last_mission)
 		
 

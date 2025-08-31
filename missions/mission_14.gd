@@ -103,7 +103,6 @@ func _on_fish_body_entered(body: Node2D, fishId: int) -> void:
 		get_node(node).queue_free()
 		
 		fish_eaten += 1
-		#$Player.scale += Vector2(0.5, 0.5)
 		$Player.scale(1.1)
 		$Player.mass += 0.05
 		if fish_eaten >= FISH_TARGET:
@@ -112,7 +111,7 @@ func _on_fish_body_entered(body: Node2D, fishId: int) -> void:
 
 func adjustFishToScreen():
 	await get_tree().process_frame
-	for i in range(1, FISH_TARGET):
+	for i in range(1, FISH_TARGET + 1):
 		var fish = get_node("Fish" + str(i))
 		var old_distance_ratio = fish.position.y / 720
 		fish.position.y = get_viewport().get_visible_rect().size.y * old_distance_ratio

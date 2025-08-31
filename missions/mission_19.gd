@@ -116,7 +116,7 @@ func _on_fish_body_entered(body: Node2D, fishId: int) -> void:
 
 func adjustFishToScreen():
 	await get_tree().process_frame
-	for i in range(1, FISH_TARGET):
+	for i: int in range(1, FISH_TARGET + 1):
 		var fish = get_node("Fish" + str(i))
 		var old_distance_ratio = fish.position.y / 720
 		fish.position.y = get_viewport().get_visible_rect().size.y * old_distance_ratio

@@ -9,7 +9,7 @@ const MissionData = preload("res://missions/mission_data.gd")
 @onready var dummyPenSprite_ref: AnimatedSprite2D = $Path2D/PathFollow2D/DummyPenguin/AnimatedSprite2D
 
 const MISSION_ID = MissionData.Id.MONA_LISA
-const MAX_DISTANCE = 10.0
+const MAX_DISTANCE = 12.5
 
 var last_mission: bool = false
 var playing: bool = true

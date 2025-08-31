@@ -121,7 +121,6 @@ curve = SubResource("Curve2D_6afb0")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
 position = Vector2(92.4154, -141.564)
-scale = Vector2(0.758682, 0.889077)
 rotates = false
 loop = false
 
